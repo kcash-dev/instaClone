@@ -1,20 +1,34 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import AuthNav from './src/nav/AuthNav';
+import HomeNav from './src/nav/HomeNav';
+import AppLoading from 'expo-app-loading';
+import { useFonts, Inter_400Regular, Inter_700Bold, } from '@expo-google-fonts/inter';
+
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
+  let [fontsLoaded] = useFonts({
+    'Pacifico_400Regular': require('./assets/fonts/Pacifico-Regular.ttf'),
+    Inter_400Regular,
+    Inter_700Bold,
+  });
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false
+        }}
+      >
+        <Stack.Screen name="Authentication" component={AuthNav} />
+        <Stack.Screen name="HomeNav" component={HomeNav} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
