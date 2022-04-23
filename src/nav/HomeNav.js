@@ -50,7 +50,7 @@ function HomeNav() {
           name="Feed" 
           component={HomeScreen} 
           options={{
-            headerLeft: () => <HeaderLeft />,
+            headerLeft: () => <HeaderLeft logoColor={ '#000' }/>,
             headerTitle: '',
             headerRight: () => <HeaderRight />
           }}
@@ -59,7 +59,7 @@ function HomeNav() {
           name="Profile" 
           component={ProfileScreen}
           options={{
-            headerLeft: () => <HeaderLeft />,
+            headerLeft: () => <HeaderLeft logoColor={ '#000' } />,
             headerTitle: '',
             headerRight: () => <HeaderRight />
           }}
