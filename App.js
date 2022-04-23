@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AuthNav from './src/nav/AuthNav';
 import HomeNav from './src/nav/HomeNav';
+import HeaderNav from './src/nav/HeaderNav';
 import AppLoading from 'expo-app-loading';
 import { useFonts, Inter_400Regular, Inter_700Bold, } from '@expo-google-fonts/inter';
 
@@ -28,6 +29,7 @@ export default function App() {
       >
         <Stack.Screen name="Authentication" component={AuthNav} />
         <Stack.Screen name="HomeNav" component={HomeNav} />
+        <Stack.Screen name="HeaderNav" component={HeaderNav} />
       </Stack.Navigator>
     </NavigationContainer>
   );

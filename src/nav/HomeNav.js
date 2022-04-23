@@ -15,7 +15,7 @@ function HomeNav() {
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
-            if (route.name === 'Home') {
+            if (route.name === 'Feed') {
               iconName = focused
                 ? 'home-filled'
                 : 'home-filled';
@@ -42,11 +42,12 @@ function HomeNav() {
           options={{
             headerLeft: () => <HeaderLeft />,
             headerTitle: '',
-            headerRight: () => <HeaderRight />
+            headerRight: () => <HeaderRight />,
+            headerTintColor: '#f6f8fa'
           }}
         />
         <Tab.Screen 
-          name="Home" 
+          name="Feed" 
           component={HomeScreen} 
           options={{
             headerLeft: () => <HeaderLeft />,

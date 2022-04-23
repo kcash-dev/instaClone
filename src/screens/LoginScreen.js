@@ -26,7 +26,7 @@ const LoginScreen = () => {
     if (user != null) {
         console.log('We are authenticated now!');
         navigation.navigate('HomeNav', {
-        screen: 'Home'
+        screen: 'Feed'
         })
     }
     });
