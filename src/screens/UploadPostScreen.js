@@ -1,11 +1,20 @@
-import { StyleSheet, View, SafeAreaView, Image, Pressable, Text } from 'react-native'
+import { 
+  StyleSheet, 
+  View, 
+  SafeAreaView, 
+  Image, 
+  Pressable, 
+  Text 
+} from 'react-native'
 import React, { useState } from 'react'
 import * as ImagePicker from 'expo-image-picker';
 import Button from '../components/Button'
 import { useNavigation } from '@react-navigation/native';
-
-//Firebase
-import { storage, ref, uploadBytes } from '../auth/firebase'
+import {
+  getStorage,
+  ref,
+  uploadBytes
+} from 'firebase/storage'
 
 //Icons
 import { AntDesign } from '@expo/vector-icons';
@@ -29,11 +38,6 @@ const UploadPostScreen = () => {
 
     if (!result.cancelled) {
       setImage(result);
-      const imageRef = ref(storage, 'image.jpg')
-      const img = await fetch(result.uri)
-      const bytes = await img.blob();
-
-      await uploadBytes(imageRef, bytes)
     }
 
     setDisabled(false)
@@ -67,7 +71,7 @@ const UploadPostScreen = () => {
             },
             
           ]}
-          onPress={() => navigation.navigate('Finalize Post', { image: image.uri })}
+          onPress={() => navigation.navigate('Finalize Post', { image: image })}
           disabled={disabled}
         >
           <Text

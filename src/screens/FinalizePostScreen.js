@@ -23,6 +23,8 @@ const FinalizePostScreen = ({ route }) => {
     const [ caption, setCaption ] = useState('')
     const navigation = useNavigation()
 
+    console.log(image)
+
     return (
         <SafeAreaView style={ styles.container }>
             <View style={ styles.nextButtonContainer }>
@@ -37,7 +39,7 @@ const FinalizePostScreen = ({ route }) => {
                 ]}
                 onPress={() => navigation.pop()}
                 >
-                <AntDesign name="close" size={28} color="#fff" />
+                    <AntDesign name="close" size={28} color="#fff" />
                 </Pressable>
                 <Text style={ styles.newPostText }>New Post</Text>
                 <Pressable

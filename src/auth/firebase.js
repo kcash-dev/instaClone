@@ -79,8 +79,11 @@ async function uploadNewPost(image) {
   try {
     const imageRef = ref(storage, 'image.jpg')
     const img = image.uri
-    const bytes = await img.blob()
+    console.log('uri: ' + img)
+    const bytes = img.blob()
+
     await uploadBytes(imageRef, bytes)
+
   } catch (err) {
     console.error(err)
   }
