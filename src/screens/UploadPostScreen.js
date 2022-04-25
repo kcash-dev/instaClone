@@ -4,6 +4,9 @@ import * as ImagePicker from 'expo-image-picker';
 import Button from '../components/Button'
 import { useNavigation } from '@react-navigation/native';
 
+//Firebase
+import { storage, ref, uploadBytes } from '../auth/firebase'
+
 //Icons
 import { AntDesign } from '@expo/vector-icons';
 
@@ -25,7 +28,12 @@ const UploadPostScreen = () => {
     console.log(result);
 
     if (!result.cancelled) {
-      setImage(result.uri);
+      setImage(result);
+      const imageRef = ref(storage, 'image.jpg')
+      const img = await fetch(result.uri)
+      const bytes = await img.blob();
+
+      await uploadBytes(imageRef, bytes)
     }
 
     setDisabled(false)
@@ -59,7 +67,7 @@ const UploadPostScreen = () => {
             },
             
           ]}
-          onPress={() => navigation.navigate('Finalize Post', { image: image })}
+          onPress={() => navigation.navigate('Finalize Post', { image: image.uri })}
           disabled={disabled}
         >
           <Text
@@ -69,7 +77,7 @@ const UploadPostScreen = () => {
           </Text>
         </Pressable>
       </View>
-      {image && <Image source={{ uri: image }} style={ styles.image } />}
+      {image && <Image source={{ uri: image.uri }} style={ styles.image } />}
       { image ?
         <View style={ styles.pickImageButton }>
           <Button placeholderText="Pick a different image" onPress={pickImage} />
@@ -108,7 +116,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%', 
-    height: 200
+    height: 400
   },
   pickImageButton: {
     paddingVertical: 30

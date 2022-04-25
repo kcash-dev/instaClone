@@ -1,6 +1,19 @@
-import { StyleSheet, Text, View, SafeAreaView, Image, TextInput, Pressable } from 'react-native'
+import { 
+    StyleSheet, 
+    Text, 
+    View, 
+    SafeAreaView, 
+    Image, 
+    TextInput, 
+    Pressable,
+    TouchableWithoutFeedback,
+    Keyboard,
+    KeyboardAvoidingView,
+    Platform 
+} from 'react-native'
 import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
+import { uploadNewPost } from '../auth/firebase';
 
 //Icons
 import { AntDesign } from '@expo/vector-icons';
@@ -16,7 +29,7 @@ const FinalizePostScreen = ({ route }) => {
                 <Pressable
                 style={({ pressed }) => [
                     {
-                    opacity: pressed ?
+                        opacity: pressed ?
                     0.5
                     :
                     1
@@ -24,7 +37,7 @@ const FinalizePostScreen = ({ route }) => {
                 ]}
                 onPress={() => navigation.pop()}
                 >
-                <AntDesign name="close" size={28} color="#000" />
+                <AntDesign name="close" size={28} color="#fff" />
                 </Pressable>
                 <Text style={ styles.newPostText }>New Post</Text>
                 <Pressable
@@ -36,7 +49,7 @@ const FinalizePostScreen = ({ route }) => {
                             1
                         },
                     ]}
-                    onPress={() => navigation.navigate('Finalize Post', { image: image })}
+                    onPress={() => uploadNewPost(image)}
                 >
                 <Text
                     style={[ styles.nextButton, { color: '#76c8f8' } ]}
@@ -45,19 +58,30 @@ const FinalizePostScreen = ({ route }) => {
                 </Text>
                 </Pressable>
             </View>
-            <View style={ styles.imageCaptionBox }>
-                <Image 
-                    source={{ uri: image }}
-                    style={ styles.image }
-                />
-                <TextInput 
-                    placeholder="Write a caption..."
-                    value={ caption }
-                    onChangeText={text => setCaption(text)}
-                    multiline={ true }
-                    style={ styles.captionText }
-                />
+                <TouchableWithoutFeedback
+                    onPress={() => Keyboard.dismiss()}
+                >
+                <View style={ styles.imageBox }>
+                    <Image 
+                        source={{ uri: image.uri }}
+                        style={ styles.image }
+                    />
+                    <KeyboardAvoidingView 
+                        style={ styles.imageCaptionBox }
+                        behavior={ Platform.OS == 'ios' ? 'padding' : 'height' }
+                    >
+                        <TextInput 
+                            placeholder="Write a caption..."
+                            value={ caption }
+                            onChangeText={text => setCaption(text)}
+                            multiline={ true }
+                            style={ styles.captionText }
+                            placeholderTextColor='#fff'
+                            onBlur={ Keyboard.dismiss() }
+                        />
+                    </KeyboardAvoidingView>
             </View>
+            </TouchableWithoutFeedback>
         </SafeAreaView>
     )
 }
@@ -67,6 +91,7 @@ export default FinalizePostScreen
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: '#000'
     },
     nextButtonContainer: {
         flexDirection: 'row',
@@ -77,7 +102,7 @@ const styles = StyleSheet.create({
         paddingVertical: 15
     },
     newPostText: {
-        color: '#000',
+        color: '#fff',
         fontSize: 20,
         fontWeight: 'bold'
     },
@@ -88,11 +113,18 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 250,
     },
-    imageCaptionBox: {
+    imageBox: {
         margin: 10
+    },
+    imageCaptionBox: {
+        height: 200,
+        borderBottomColor: '#fff',
+        borderWidth: 1,
     },
     captionText: {
         fontSize: 18,
         paddingTop: 25,
+        color: '#fff',
+        opacity: 0.6
     }
 })

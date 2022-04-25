@@ -1,6 +1,7 @@
 import { StyleSheet, FlatList, SafeAreaView } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //Components
 import FeedImage from '../components/FeedImage'

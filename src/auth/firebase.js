@@ -16,10 +16,17 @@ import {
   collection 
 } from 'firebase/firestore';
 
+import {
+  getStorage,
+  ref,
+  uploadBytes
+} from 'firebase/storage'
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const firestore = getFirestore(app);
 const auth = getAuth();
+const storage = getStorage();
 
 let userUID;
 
@@ -29,11 +36,10 @@ const registration = async (email, password, fullName, username) => {
     .then(async (userCredential) => {
       const user = userCredential.user
       userUID = user.uid
-      const docRef = await setDoc(doc(firestore, "users", user.uid), {
+      await setDoc(doc(firestore, "users", user.uid), {
         email: email,
         fullName: fullName,
         username: username,
-        posts: []
       })
     })
     .catch((error) => {
@@ -69,15 +75,15 @@ async function loggingOut() {
 }
 
 //Upload Post
-async function uploadPost(post) {
-  const docRef = doc(firestore, "users", userUID);
-  setDoc(docRef, {posts: {
-    id: post.id,
-    photo: post.photo,
-    title: post.title,
-    caption: post.caption,
-    likes: []
-  }}, { merge: true })
+async function uploadNewPost(image) {
+  try {
+    const imageRef = ref(storage, 'image.jpg')
+    const img = image.uri
+    const bytes = await img.blob()
+    await uploadBytes(imageRef, bytes)
+  } catch (err) {
+    console.error(err)
+  }
 }
 
-export { auth, onAuthStateChanged, registration, signIn, loggingOut, uploadPost };
+export { auth, storage, ref, uploadBytes, onAuthStateChanged, registration, signIn, loggingOut, uploadNewPost };

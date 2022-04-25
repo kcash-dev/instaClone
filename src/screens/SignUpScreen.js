@@ -1,4 +1,16 @@
-import { StyleSheet, Text, TextInput, SafeAreaView, View, Pressable, Alert } from 'react-native'
+import { 
+    StyleSheet, 
+    Text, 
+    TextInput, 
+    SafeAreaView, 
+    View, 
+    Pressable, 
+    Alert,
+    KeyboardAvoidingView,
+    Platform,
+    TouchableWithoutFeedback,
+    Keyboard 
+} from 'react-native'
 import React, { useState } from 'react'
 import Button from '../components/Button'
 import { useNavigation } from '@react-navigation/native'
@@ -73,39 +85,48 @@ const SignUpScreen = () => {
                     style={ styles.separator }
                 />
             </View>
-            <TextInput 
-                placeholder="Email"
-                placeholderTextColor={'#8e8e8e'}
-                style={ styles.textInputs }
-                value={ email }
-                onChangeText={text => setEmail(text) }
-                keyboardType="email-address"
-            />
-            <TextInput 
-                placeholder="Full Name"
-                style={ styles.textInputs }
-                placeholderTextColor={'#8e8e8e'}
-                placeholderText={ styles.text }
-                value={ fullName }
-                onChangeText={text => setFullName(text) }
-            />
-            <TextInput 
-                placeholder="Username"
-                style={ styles.textInputs }
-                placeholderTextColor={'#8e8e8e'}
-                placeholderText={ styles.text }
-                value={ username }
-                onChangeText={text => setUserName(text) }
-            />
-            <TextInput 
-                placeholder="Password"
-                style={ styles.textInputs }
-                placeholderTextColor={'#8e8e8e'}
-                placeholderText={ styles.text }
-                value={ password }
-                onChangeText={text => setPassword(text) }
-                secureTextEntry={true}
-            />
+            <TouchableWithoutFeedback
+                onPress={() => Keyboard.dismiss()}
+            >
+
+                <KeyboardAvoidingView
+                    behavior={ Platform.OS = 'ios' ? 'padding' : 'height' }
+                >
+                    <TextInput 
+                        placeholder="Email"
+                        placeholderTextColor={'#8e8e8e'}
+                        style={ styles.textInputs }
+                        value={ email }
+                        onChangeText={text => setEmail(text) }
+                        keyboardType="email-address"
+                    />
+                    <TextInput 
+                        placeholder="Full Name"
+                        style={ styles.textInputs }
+                        placeholderTextColor={'#8e8e8e'}
+                        placeholderText={ styles.text }
+                        value={ fullName }
+                        onChangeText={text => setFullName(text) }
+                    />
+                    <TextInput 
+                        placeholder="Username"
+                        style={ styles.textInputs }
+                        placeholderTextColor={'#8e8e8e'}
+                        placeholderText={ styles.text }
+                        value={ username }
+                        onChangeText={text => setUserName(text) }
+                    />
+                    <TextInput 
+                        placeholder="Password"
+                        style={ styles.textInputs }
+                        placeholderTextColor={'#8e8e8e'}
+                        placeholderText={ styles.text }
+                        value={ password }
+                        onChangeText={text => setPassword(text) }
+                        secureTextEntry={true}
+                    />
+                </KeyboardAvoidingView>
+            </TouchableWithoutFeedback>
             <Button 
                 placeholderText={"Sign up"}
                 onPress={ handlePress }
