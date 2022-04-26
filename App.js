@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
-import { Text, View } from 'react-native';
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+//Navs 
 import AuthNav from './src/nav/AuthNav';
 import HomeNav from './src/nav/HomeNav';
 import HeaderNav from './src/nav/HeaderNav';
+
 import AppLoading from 'expo-app-loading';
+
+//Fonts
 import { useFonts, Inter_400Regular, Inter_700Bold, } from '@expo-google-fonts/inter';
 
 

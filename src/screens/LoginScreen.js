@@ -17,18 +17,18 @@ const LoginScreen = () => {
         } else {
           signIn(
             email,
-            password,
+            password
           );
         }
     };
 
     onAuthStateChanged(auth, user => {
-    if (user != null) {
-        console.log('We are authenticated now!');
-        navigation.navigate('HomeNav', {
-        screen: 'Feed'
-        })
-    }
+        if (user != null) {
+            console.log('We are authenticated now!');
+            navigation.navigate('HomeNav', {
+            screen: 'Feed'
+            })
+        }
     });
 
     return (

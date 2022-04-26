@@ -1,15 +1,20 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, Image, SafeAreaView } from 'react-native'
 import React from 'react'
 import { loggingOut } from '../auth/firebase'
-import Button from '../components/Button'
 import { useNavigation } from '@react-navigation/native'
+
+//Components
+import ProfileHeader from '../components/ProfileHeader'
+import ProfileInfo from '../components/ProfileInfo'
+import Button from '../components/Button'
 
 const ProfileScreen = () => {
   const navigation = useNavigation()
   return (
-    <View>
-      <Text>ProfileScreen</Text>
-      <Button 
+    <SafeAreaView>
+      <ProfileHeader username={ 'kcash935' }/>
+      <ProfileInfo />
+      {/* <Button 
         placeholderText={'Sign Out'}
         onPress={() => {
           loggingOut()
@@ -17,11 +22,13 @@ const ProfileScreen = () => {
             screen: 'Login Screen'
           })
         }}
-      />
-    </View>
+      /> */}
+    </SafeAreaView>
   )
 }
 
 export default ProfileScreen
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+
+})

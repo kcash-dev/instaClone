@@ -59,9 +59,7 @@ function HomeNav() {
           name="Profile" 
           component={ProfileScreen}
           options={{
-            headerLeft: () => <HeaderLeft logoColor={ '#000' } />,
-            headerTitle: '',
-            headerRight: () => <HeaderRight />
+            headerShown: false
           }}
         />
       </Tab.Navigator>
