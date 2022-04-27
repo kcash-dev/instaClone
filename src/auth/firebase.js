@@ -40,6 +40,8 @@ const registration = async (email, password, fullName, username) => {
         email: email,
         fullName: fullName,
         username: username,
+        bio: '',
+        website: '',
       })
     })
     .catch((error) => {
@@ -53,7 +55,6 @@ const signIn = async (email, password) => {
   signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
-      console.log(user.uid)
     })
     .catch((error) => {
       const errorCode = error.code;
@@ -65,7 +66,6 @@ const signIn = async (email, password) => {
 async function loggingOut() {
   try {
     signOut(auth).then(() => {
-      console.log('The user has been signed out')
     }).catch((error) => {
       console.error(error)
     });
@@ -79,7 +79,6 @@ async function uploadNewPost(image) {
   try {
     const imageRef = ref(storage, 'image.jpg')
     const img = image.uri
-    console.log('uri: ' + img)
     const bytes = img.blob()
 
     await uploadBytes(imageRef, bytes)

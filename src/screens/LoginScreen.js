@@ -24,7 +24,6 @@ const LoginScreen = () => {
 
     onAuthStateChanged(auth, user => {
         if (user != null) {
-            console.log('We are authenticated now!');
             navigation.navigate('HomeNav', {
             screen: 'Feed'
             })

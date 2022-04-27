@@ -20,7 +20,7 @@ import { getAuth } from 'firebase/auth'
 import NewPostButton from './NewPostButton';
 
 const ProfileHeader = () => {
-    const [ username, setUsername ] = useState('')
+    const [ user, setUser ] = useState()
     const auth = getAuth()
     const db = getFirestore()
 
@@ -29,17 +29,20 @@ const ProfileHeader = () => {
         const docSnap = await getDoc(docRef)
 
         const userInfo = docSnap.data()
-        setUsername(userInfo.username)
+        setUser(userInfo)
     }
 
     useEffect(() => {
         getUserInfo()
-    }, [])
+    }, [ user ])
+
+    console.log(user)
+
     return (
         <View style={ styles.headerContainer }>
             <View style={ styles.nameContainer }>
                 <Text style={ styles.usernameText }>
-                    { username }
+                    { user?.username }
                 </Text>
                 <Pressable
                 style={({ pressed }) => [

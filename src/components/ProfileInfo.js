@@ -2,9 +2,12 @@ import {
     StyleSheet, 
     Text, 
     View, 
-    Image 
+    Image,
+    Pressable 
 } from 'react-native'
 import React, { useState, useEffect } from 'react'
+
+import * as Linking from 'expo-linking';
 
 //Navigation
 import { useNavigation } from '@react-navigation/native'
@@ -18,9 +21,8 @@ import { getDoc, doc, getFirestore } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
 
 const ProfileInfo = () => {
-    const [ name, setName ] = useState('')
-    const [ username, setUsername ] = useState('')
     const [ userInfo, setUserInfo ] = useState()
+    const [ url, setUrl ] = useState('')
     const auth = getAuth()
     const db = getFirestore()
     const navigation = useNavigation()
@@ -30,15 +32,14 @@ const ProfileInfo = () => {
         const docSnap = await getDoc(docRef)
 
         const userInfo = docSnap.data()
-
-        setName(userInfo.fullName)
-        setUsername(userInfo.username)
+        
         setUserInfo(userInfo)
+        setUrl(userInfo.website)
     }
 
     useEffect(() => {
         getUserInfo()
-    }, [])
+    }, [ userInfo ])
 
     return (
     <View>
@@ -96,12 +97,27 @@ const ProfileInfo = () => {
         <View style={ styles.bioContainer }>
             <View>
                 <Text style={ styles.username }>
-                    { name }
+                    { userInfo?.fullName }
                 </Text>
             </View>
+            <Pressable
+                style={({ pressed }) => [
+                    {
+                        opacity: pressed ?
+                    0.5
+                    :
+                    1
+                }
+                ]}
+                onPressOut={() => Linking.openURL('https://' + url)}
+            >
+                <Text style={{ color: 'blue' }}>
+                    { userInfo?.website }
+                </Text>
+            </Pressable>
             <View>
                 <Text>
-                    My name is Kyle Cash and this is my Instagram. I am not famous.
+                    { userInfo?.bio }
                 </Text>
             </View>
         </View>

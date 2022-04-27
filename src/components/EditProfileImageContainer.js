@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
         height: 100,
         width: 100,
         borderRadius: 100,
-        marginBottom: '10%'
+        marginBottom: '5%'
     },
     changePhotoText: {
         color: '#76c8f8',
