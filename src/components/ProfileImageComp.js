@@ -1,27 +1,35 @@
 import { StyleSheet, Image, Pressable } from 'react-native'
 import React from 'react'
+import { useNavigation } from '@react-navigation/native'
 
 const ProfileImageComp = ({ item }) => {
-    console.log(item)
-  return (
-      <Pressable
-        style={({ pressed }) => [
-            {
-                opacity: pressed ?
-                0.5
-                :
-                1,
-                width: '33%',
-                marginBottom: 1
-            }
-        ]}
-      >
-          <Image 
-            source={{ uri: item.imageURI }}
-            style={ styles.image }
-          />
-      </Pressable>
-  )
+    const navigation = useNavigation()
+    return (
+        <Pressable
+            style={({ pressed }) => [
+                {
+                    opacity: pressed ?
+                    0.5
+                    :
+                    1,
+                    width: '33%',
+                    marginBottom: 1
+                }
+            ]}
+            onPress={() => navigation.navigate('ProfileNav', {
+                screen: 'View Post',
+                params: {
+                    image: item
+                }
+            },
+            ) }
+        >
+            <Image 
+                source={{ uri: item.imageURI }}
+                style={ styles.image }
+            />
+        </Pressable>
+    )
 }
 
 export default ProfileImageComp

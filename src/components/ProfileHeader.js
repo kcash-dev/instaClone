@@ -17,6 +17,7 @@ import Button from './Button';
 //Firebase
 import { getDoc, doc, getFirestore } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
+import NewPostButton from './NewPostButton';
 
 const ProfileHeader = () => {
     const [ username, setUsername ] = useState('')
@@ -54,23 +55,7 @@ const ProfileHeader = () => {
                 </Pressable>
             </View>
             <View style={ styles.profileOptionsContainer }>
-                <Pressable
-                    style={({ pressed }) => [
-                        {
-                            opacity: pressed ? 
-                            0.5
-                            :
-                            1,
-                            paddingHorizontal: 10
-                        }
-                    ]}
-                >
-                    <MaterialIcons 
-                        name="add-circle-outline" 
-                        size={28} 
-                        color="black" 
-                    />   
-                </Pressable>
+                <NewPostButton />
                 <Pressable
                     style={({ pressed }) => [
                         {
@@ -103,7 +88,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         borderBottomWidth: 1,
-        borderBottomColor: '#808080',
+        borderBottomColor: '#EBECF0',
         alignItems: 'center',
         width: '100%',
         paddingHorizontal: 10,

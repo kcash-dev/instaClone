@@ -78,7 +78,7 @@ const ProfileImages = () => {
           <MaterialIcons 
             name="border-all" 
             size={30} 
-            color="black" 
+            color='#a9a9a9' 
             style={ styles.profileIcon }
           />
         </Pressable>
@@ -91,9 +91,9 @@ const ProfileImages = () => {
           }
         ]}>
           <MaterialCommunityIcons 
-            name="menu" 
+            name="format-list-bulleted" 
             size={30} 
-            color="black" 
+            color='#a9a9a9' 
             style={ styles.profileIcon }
           />
         </Pressable>
@@ -106,9 +106,9 @@ const ProfileImages = () => {
           }
         ]}>
           <MaterialIcons 
-            name="location-history" 
+            name="location-pin" 
             size={30} 
-            color="black" 
+            color='#a9a9a9' 
             style={ styles.profileIcon }
           />
         </Pressable>
@@ -123,7 +123,7 @@ const ProfileImages = () => {
           <MaterialCommunityIcons 
             name="clipboard-account" 
             size={30} 
-            color="black" 
+            color='#a9a9a9' 
             style={ styles.profileIcon }
           />
         </Pressable>
@@ -143,7 +143,7 @@ export default ProfileImages
 
 const styles = StyleSheet.create({
   profileChoices: {
-    borderTopColor: '#808080',
+    borderTopColor: '#D3D3D3',
     borderTopWidth: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',

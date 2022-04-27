@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AuthNav from './src/nav/AuthNav';
 import HomeNav from './src/nav/HomeNav';
 import HeaderNav from './src/nav/HeaderNav';
+import ProfileNav from './src/nav/ProfileNav';
 
 import AppLoading from 'expo-app-loading';
 
@@ -34,6 +35,7 @@ export default function App() {
         <Stack.Screen name="Authentication" component={AuthNav} />
         <Stack.Screen name="HomeNav" component={HomeNav} />
         <Stack.Screen name="HeaderNav" component={HeaderNav} />
+        <Stack.Screen name="ProfileNav" component={ProfileNav} />
       </Stack.Navigator>
     </NavigationContainer>
   );
