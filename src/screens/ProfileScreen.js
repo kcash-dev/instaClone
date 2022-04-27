@@ -7,13 +7,15 @@ import { useNavigation } from '@react-navigation/native'
 import ProfileHeader from '../components/ProfileHeader'
 import ProfileInfo from '../components/ProfileInfo'
 import Button from '../components/Button'
+import ProfileImages from '../components/ProfileImages'
 
 const ProfileScreen = () => {
   const navigation = useNavigation()
   return (
     <SafeAreaView>
-      <ProfileHeader username={ 'kcash935' }/>
+      <ProfileHeader />
       <ProfileInfo />
+      <ProfileImages />
       {/* <Button 
         placeholderText={'Sign Out'}
         onPress={() => {
