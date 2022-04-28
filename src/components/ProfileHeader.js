@@ -36,8 +36,6 @@ const ProfileHeader = () => {
         getUserInfo()
     }, [ user ])
 
-    console.log(user)
-
     return (
         <View style={ styles.headerContainer }>
             <View style={ styles.nameContainer }>

@@ -1,5 +1,9 @@
-import { StyleSheet, View, FlatList, Pressable } from 'react-native'
+import { StyleSheet, View, FlatList, Pressable, Alert } from 'react-native'
 import React, { useState, useEffect } from 'react'
+
+//Firebase
+import { doc, getDoc, getFirestore } from 'firebase/firestore'
+import { auth } from '../auth/firebase'
 
 //Components
 import ProfileImageComp from './ProfileImageComp'
@@ -8,61 +12,76 @@ import ProfileImageComp from './ProfileImageComp'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 
-const DATA = [
-  {
-    id: 1,
-    profileName: 'kcash935',
-    profilePicURI: 'https://i.imgur.com/jEVwln7.jpg',
-    imageURI: 'https://i.imgur.com/VdCOYOy.jpg',
-    caption: 'Kyle in a bottle'
-  },
-  {
-    id: 2,
-    profileName: 'kcash935',
-    profilePicURI: 'https://i.imgur.com/jEVwln7.jpg',
-    imageURI: 'https://i.imgur.com/FtI1Ldi.jpg',
-    caption: 'Majestic Mountains'
-  },
-  {
-    id: 3,
-    profileName: 'kcash935',
-    profilePicURI: 'https://i.imgur.com/jEVwln7.jpg',
-    imageURI: 'https://i.imgur.com/EO24Oaj.jpg',
-    caption: 'Sunsets'
-  },
-  {
-    id: 4,
-    profileName: 'kcash935',
-    profilePicURI: 'https://i.imgur.com/jEVwln7.jpg',
-    imageURI: 'https://i.imgur.com/VdCOYOy.jpg',
-    caption: 'Kyle in a bottle'
-  },
-  {
-    id: 5,
-    profileName: 'kcash935',
-    profilePicURI: 'https://i.imgur.com/jEVwln7.jpg',
-    imageURI: 'https://i.imgur.com/FtI1Ldi.jpg',
-    caption: 'Majestic Mountains'
-  },
-  {
-    id: 6,
-    profileName: 'kcash935',
-    profilePicURI: 'https://i.imgur.com/jEVwln7.jpg',
-    imageURI: 'https://i.imgur.com/EO24Oaj.jpg',
-    caption: 'Sunsets'
-  },
-]
+// const DATA1 = [
+//   {
+//     id: 1,
+//     profileName: 'kcash935',
+//     profilePicURI: 'https://i.imgur.com/jEVwln7.jpg',
+//     imageURI: 'https://i.imgur.com/VdCOYOy.jpg',
+//     caption: 'Kyle in a bottle'
+//   },
+//   {
+//     id: 2,
+//     profileName: 'kcash935',
+//     profilePicURI: 'https://i.imgur.com/jEVwln7.jpg',
+//     imageURI: 'https://i.imgur.com/FtI1Ldi.jpg',
+//     caption: 'Majestic Mountains'
+//   },
+//   {
+//     id: 3,
+//     profileName: 'kcash935',
+//     profilePicURI: 'https://i.imgur.com/jEVwln7.jpg',
+//     imageURI: 'https://i.imgur.com/EO24Oaj.jpg',
+//     caption: 'Sunsets'
+//   },
+//   {
+//     id: 4,
+//     profileName: 'kcash935',
+//     profilePicURI: 'https://i.imgur.com/jEVwln7.jpg',
+//     imageURI: 'https://i.imgur.com/VdCOYOy.jpg',
+//     caption: 'Kyle in a bottle'
+//   },
+//   {
+//     id: 5,
+//     profileName: 'kcash935',
+//     profilePicURI: 'https://i.imgur.com/jEVwln7.jpg',
+//     imageURI: 'https://i.imgur.com/FtI1Ldi.jpg',
+//     caption: 'Majestic Mountains'
+//   },
+//   {
+//     id: 6,
+//     profileName: 'kcash935',
+//     profilePicURI: 'https://i.imgur.com/jEVwln7.jpg',
+//     imageURI: 'https://i.imgur.com/EO24Oaj.jpg',
+//     caption: 'Sunsets'
+//   },
+// ]
 
 const ProfileImages = () => {
   const [ scroll, setScroll ] = useState(false)
+  const [ DATA, setDATA ] = useState()
 
-  useEffect(() => {
-    if(DATA.length >= 7) {
-      setScroll(true)
+  useEffect( async () => {
+    const currentUser = auth.currentUser.uid
+    const firestore = getFirestore()
+    const userRef = doc(firestore, 'users', currentUser);
+    const docSnap = await getDoc(userRef)
+    let userInfo;
+
+    if(docSnap.exists()) {
+      userInfo = docSnap.data()
+      setDATA(userInfo)
     } else {
-      setScroll(false)
+      Alert.alert('No images found!')
     }
+
+    // if(DATA.length >= 7) {
+    //   setScroll(true)
+    // } else {
+    //   setScroll(false)
+    // }
   }, [])
+
 
   return (
     <View style={ styles.container }>
@@ -129,8 +148,8 @@ const ProfileImages = () => {
         </Pressable>
       </View>
       <FlatList
-        data={DATA}
-        renderItem={({ item }) => <ProfileImageComp item={ item } />}
+        data={DATA.posts}
+        renderItem={({ item }) => <ProfileImageComp item={ item } data={DATA} />}
         numColumns={ 3 }
         columnWrapperStyle={ styles.row }
         scrollEnabled={ scroll }

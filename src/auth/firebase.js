@@ -74,18 +74,4 @@ async function loggingOut() {
   }
 }
 
-//Upload Post
-async function uploadNewPost(image) {
-  try {
-    const imageRef = ref(storage, 'image.jpg')
-    const img = image.uri
-    const bytes = img.blob()
-
-    await uploadBytes(imageRef, bytes)
-
-  } catch (err) {
-    console.error(err)
-  }
-}
-
-export { auth, storage, ref, uploadBytes, onAuthStateChanged, registration, signIn, loggingOut, uploadNewPost };
+export { auth, storage, ref, uploadBytes, onAuthStateChanged, registration, signIn, loggingOut };

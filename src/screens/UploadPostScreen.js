@@ -4,17 +4,14 @@ import {
   SafeAreaView, 
   Image, 
   Pressable, 
-  Text 
+  Text,
+  Alert,
+  Platform 
 } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import * as ImagePicker from 'expo-image-picker';
 import Button from '../components/Button'
 import { useNavigation } from '@react-navigation/native';
-import {
-  getStorage,
-  ref,
-  uploadBytes
-} from 'firebase/storage'
 
 //Icons
 import { AntDesign } from '@expo/vector-icons';
@@ -24,6 +21,17 @@ const UploadPostScreen = () => {
   const [image, setImage] = useState(null);
   const [ disabled, setDisabled ] = useState(true)
   const [ disabledColor, setDisabledColor ] = useState('#808080')
+
+  useEffect(() => {
+    (async () => {
+      if (Platform.OS !== 'web') {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if(status !== 'granted') {
+          Alert.alert('Sorry, we need permission to make this work!')
+        }
+      }
+    })();
+  }, [])
   
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library

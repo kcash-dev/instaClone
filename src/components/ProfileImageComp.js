@@ -4,6 +4,8 @@ import { useNavigation } from '@react-navigation/native'
 
 const ProfileImageComp = ({ item }) => {
     const navigation = useNavigation()
+
+    console.log(item, 'ITEM')
     return (
         <Pressable
             style={({ pressed }) => [
@@ -25,7 +27,7 @@ const ProfileImageComp = ({ item }) => {
             ) }
         >
             <Image 
-                source={{ uri: item.imageURI }}
+                source={{ uri: item }}
                 style={ styles.image }
             />
         </Pressable>

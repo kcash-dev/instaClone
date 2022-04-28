@@ -11,9 +11,27 @@ import {
     KeyboardAvoidingView,
     Platform 
 } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native';
-import { uploadNewPost } from '../auth/firebase';
+import {
+    getDownloadURL,
+    getStorage,
+    ref,
+    uploadBytes
+} from 'firebase/storage'
+
+import {
+    doc,
+    updateDoc,
+    getFirestore,
+    arrayUnion,
+    getDoc
+} from 'firebase/firestore'
+
+import {
+    auth
+} from '../auth/firebase'
+
 
 //Icons
 import { AntDesign } from '@expo/vector-icons';
@@ -21,9 +39,50 @@ import { AntDesign } from '@expo/vector-icons';
 const FinalizePostScreen = ({ route }) => {
     const { image } = route.params
     const [ caption, setCaption ] = useState('')
+    const [ currentUserInfo, setCurrentUserInfo ] = useState()
+    const [ url, setUrl ] = useState('')
     const navigation = useNavigation()
+    const currentUser = auth.currentUser.uid
+    const firestore = getFirestore()
 
-    console.log(image)
+    useEffect(async () => {
+        const userRef = doc(firestore, 'users', currentUser)
+        const docSnap = await getDoc(userRef)
+
+        if(docSnap.exists()) {
+            setCurrentUserInfo(docSnap.data())
+        }
+    }, [])
+
+    const uploadImage = async (image) => {
+        const storage = getStorage();
+        const name = caption;
+        const imageRef = ref(storage, name);
+
+        const img = await fetch(image.uri)
+        const bytes = await img.blob();
+        
+        await uploadBytes(imageRef, bytes)
+            .then( async () => {
+                const reference = ref(storage, name)
+                await getDownloadURL(reference).then(async (x) => {
+                    const userRef = doc(firestore, 'users', currentUser)
+                    await updateDoc(userRef, {
+                        posts: arrayUnion({
+                            id: currentUserInfo.posts.length,
+                            profileName: currentUserInfo.username,
+                            profilePicURI: 'https://i.imgur.com/jEVwln7.jpg',
+                            imageURI: x,
+                            caption: name
+                        })
+                    })
+                }).catch((err) => console.error(err))
+            })
+
+        navigation.navigate('HomeNav', {
+            screen: 'Feed'
+        })
+    }
 
     return (
         <SafeAreaView style={ styles.container }>
@@ -51,7 +110,7 @@ const FinalizePostScreen = ({ route }) => {
                             1
                         },
                     ]}
-                    onPress={() => uploadNewPost(image)}
+                    onPress={() => uploadImage(image)}
                 >
                 <Text
                     style={[ styles.nextButton, { color: '#76c8f8' } ]}
@@ -72,15 +131,16 @@ const FinalizePostScreen = ({ route }) => {
                         style={ styles.imageCaptionBox }
                         behavior={ Platform.OS == 'ios' ? 'padding' : 'height' }
                     >
-                        <TextInput 
-                            placeholder="Write a caption..."
-                            value={ caption }
-                            onChangeText={text => setCaption(text)}
-                            multiline={ true }
-                            style={ styles.captionText }
-                            placeholderTextColor='#fff'
-                            onBlur={ Keyboard.dismiss() }
-                        />
+                        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                            <TextInput 
+                                placeholder="Write a caption..."
+                                value={ caption }
+                                onChangeText={text => setCaption(text)}
+                                multiline={ true }
+                                style={ styles.captionText }
+                                placeholderTextColor='#fff'
+                            />
+                        </TouchableWithoutFeedback>
                     </KeyboardAvoidingView>
             </View>
             </TouchableWithoutFeedback>
@@ -113,7 +173,7 @@ const styles = StyleSheet.create({
     },
     image: {
         width: '100%',
-        height: 250,
+        height: 300,
     },
     imageBox: {
         margin: 10
