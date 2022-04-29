@@ -12,11 +12,14 @@ import {
 } from 'react-native'
 import React, { useState, useEffect } from 'react'
 
+import { useNavigation } from '@react-navigation/native';
+
 //Firestore
 import { getDoc, doc, updateDoc, getFirestore } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
 
-const EditProfileInfoContainer = ({ userState, handleCallback }) => {
+const EditProfileInfoContainer = ({ userState }) => {
+    const navigation = useNavigation()
     const [ state, setState ] = useState({
         name: userState.name,
         username: userState.username,
@@ -24,15 +27,22 @@ const EditProfileInfoContainer = ({ userState, handleCallback }) => {
         bio: userState.bio
     })
 
-    const functionHandler = () => {
-        if(!state.name) {
-            Alert.alert('You need to enter a name!')
-        } else if (!state.username) {
-            Alert.alert('You need to enter a username!')
-        } else {
-            handleCallback(state)
-            Alert.alert('Saved!')
-        }
+    const updateUserInfo = async () => {
+        const userRef = doc(db, 'users', auth.currentUser.uid)
+
+        await updateDoc(userRef, {
+            fullName: state.name,
+            username: state.username,
+            website: state.website,
+            bio: state.bio
+        })
+    }
+
+    const saveDataToCloud = () => {
+        updateUserInfo()
+        navigation.navigate('HomeNav', {
+            screen: 'Profile'
+        })
     }
 
     const auth = getAuth()
@@ -136,7 +146,7 @@ const EditProfileInfoContainer = ({ userState, handleCallback }) => {
             </View>
             <Button
                 title="Save"
-                onPress={() => functionHandler()}
+                onPress={() => saveDataToCloud()}
                 style={ styles.button }
             />
         </KeyboardAvoidingView>

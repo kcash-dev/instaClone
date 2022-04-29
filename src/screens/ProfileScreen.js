@@ -12,7 +12,7 @@ import ProfileImages from '../components/ProfileImages'
 const ProfileScreen = () => {
   const navigation = useNavigation()
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1 }}>
       <ProfileHeader />
       <ProfileInfo />
       <ProfileImages />

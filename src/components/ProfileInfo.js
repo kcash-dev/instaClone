@@ -23,6 +23,7 @@ import { getAuth } from 'firebase/auth'
 const ProfileInfo = () => {
     const [ userInfo, setUserInfo ] = useState()
     const [ url, setUrl ] = useState('')
+    const [ postText, setPostText ] = useState('posts')
     const auth = getAuth()
     const db = getFirestore()
     const navigation = useNavigation()
@@ -31,10 +32,16 @@ const ProfileInfo = () => {
         const docRef = doc(db, 'users', auth.currentUser.uid)
         const docSnap = await getDoc(docRef)
 
-        const userInfo = docSnap.data()
+        const user = docSnap.data()
         
-        setUserInfo(userInfo)
+        setUserInfo(user)
+        
         setUrl(userInfo.website)
+        if(userInfo.posts.length === 1) {
+            setPostText('post')
+        } else {
+            setPostText('posts')
+        }
     }
 
     useEffect(() => {
@@ -45,17 +52,17 @@ const ProfileInfo = () => {
     <View>
         <View style={ styles.profileInfoContainer }>
             <Image 
-                source={{ uri: 'https://i.imgur.com/jEVwln7.jpg' }}
+                source={{ uri: userInfo.profilePicURI }}
                 style={ styles.profilePicture }
             />
             <View>
                 <View style={ styles.innerProfileInfoContainer }>
                     <View style={ styles.profileSpecifics }>
                         <Text style={ styles.profileNumbers }>
-                            371
+                            { userInfo?.posts?.length }
                         </Text>
                         <Text style={ styles.profileSpecificsText }>
-                            posts
+                            { postText }
                         </Text>
                     </View>
                     <View style={ styles.profileSpecifics }>

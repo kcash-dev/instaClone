@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 //Screens
 import ViewPostScreen from '../screens/ViewPostScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
+import UploadProfilePicScreen from '../screens/UploadProfilePicScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +22,10 @@ function ProfileNav() {
         <Stack.Screen 
           name="Edit Profile" 
           component={ EditProfileScreen }
+        />
+        <Stack.Screen
+          name="Upload Profile Pic"
+          component={ UploadProfilePicScreen }
         />
       </Stack.Navigator>
   );

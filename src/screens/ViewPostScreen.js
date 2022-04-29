@@ -6,11 +6,11 @@ import ViewPostHeader from '../components/ViewPostHeader';
 import FeedImage from '../components/FeedImage';
 
 const ViewPostScreen = ({ route }) => {
-    const { image } = route.params;
+    const { imageData } = route.params;
     return (
         <SafeAreaView style={ styles.container }>
             <ViewPostHeader />
-            <FeedImage item={ image }/>
+            <FeedImage item={ imageData }/>
         </SafeAreaView>
     )
 }

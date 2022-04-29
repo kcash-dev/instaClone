@@ -1,5 +1,12 @@
-import { StyleSheet, View, FlatList, Pressable, Alert } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import { 
+  StyleSheet, 
+  View, 
+  FlatList, 
+  Pressable, 
+  Alert, 
+  Text 
+} from 'react-native'
+import React, { useState, useEffect, useCallback } from 'react'
 
 //Firebase
 import { doc, getDoc, getFirestore } from 'firebase/firestore'
@@ -11,51 +18,6 @@ import ProfileImageComp from './ProfileImageComp'
 //Icons
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
-
-// const DATA1 = [
-//   {
-//     id: 1,
-//     profileName: 'kcash935',
-//     profilePicURI: 'https://i.imgur.com/jEVwln7.jpg',
-//     imageURI: 'https://i.imgur.com/VdCOYOy.jpg',
-//     caption: 'Kyle in a bottle'
-//   },
-//   {
-//     id: 2,
-//     profileName: 'kcash935',
-//     profilePicURI: 'https://i.imgur.com/jEVwln7.jpg',
-//     imageURI: 'https://i.imgur.com/FtI1Ldi.jpg',
-//     caption: 'Majestic Mountains'
-//   },
-//   {
-//     id: 3,
-//     profileName: 'kcash935',
-//     profilePicURI: 'https://i.imgur.com/jEVwln7.jpg',
-//     imageURI: 'https://i.imgur.com/EO24Oaj.jpg',
-//     caption: 'Sunsets'
-//   },
-//   {
-//     id: 4,
-//     profileName: 'kcash935',
-//     profilePicURI: 'https://i.imgur.com/jEVwln7.jpg',
-//     imageURI: 'https://i.imgur.com/VdCOYOy.jpg',
-//     caption: 'Kyle in a bottle'
-//   },
-//   {
-//     id: 5,
-//     profileName: 'kcash935',
-//     profilePicURI: 'https://i.imgur.com/jEVwln7.jpg',
-//     imageURI: 'https://i.imgur.com/FtI1Ldi.jpg',
-//     caption: 'Majestic Mountains'
-//   },
-//   {
-//     id: 6,
-//     profileName: 'kcash935',
-//     profilePicURI: 'https://i.imgur.com/jEVwln7.jpg',
-//     imageURI: 'https://i.imgur.com/EO24Oaj.jpg',
-//     caption: 'Sunsets'
-//   },
-// ]
 
 const ProfileImages = () => {
   const [ scroll, setScroll ] = useState(false)
@@ -75,13 +37,19 @@ const ProfileImages = () => {
       Alert.alert('No images found!')
     }
 
-    // if(DATA.length >= 7) {
-    //   setScroll(true)
-    // } else {
-    //   setScroll(false)
-    // }
-  }, [])
+    if(DATA.posts.length >= 7) {
+      setScroll(true)
+    } else {
+      setScroll(false)
+    }
+  }, [ DATA ])
 
+  const renderItem = useCallback(
+    ({ item }) => <ProfileImageComp item={ item.imageURI } data={item} />,
+    []
+  );
+
+  const keyExtractor = useCallback((item) => item.id.toString(), []);
 
   return (
     <View style={ styles.container }>
@@ -147,13 +115,24 @@ const ProfileImages = () => {
           />
         </Pressable>
       </View>
-      <FlatList
-        data={DATA.posts}
-        renderItem={({ item }) => <ProfileImageComp item={ item } data={DATA} />}
-        numColumns={ 3 }
-        columnWrapperStyle={ styles.row }
-        scrollEnabled={ scroll }
-      />
+      { DATA?.posts === undefined ?
+        <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+          <Text style={{ fontSize: 18, color: '#808080' }}>
+            You don't have any posts yet.
+          </Text>
+        </View>
+        :
+        <FlatList
+          data={DATA?.posts}
+          renderItem={renderItem}
+          keyExtractor={keyExtractor}
+          numColumns={ 3 }
+          columnWrapperStyle={ styles.row }
+          scrollEnabled={ scroll }
+          showsVerticalScrollIndicator={ false }
+        />
+
+      }
     </View>
   )
 }
@@ -161,6 +140,9 @@ const ProfileImages = () => {
 export default ProfileImages
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
   profileChoices: {
     borderTopColor: '#D3D3D3',
     borderTopWidth: 1,
@@ -173,7 +155,9 @@ const styles = StyleSheet.create({
   },
   row: {
     flex: 1,
-    justifyContent: 'space-around',
-    alignItems: 'flex-start'
+    marginVertical: 1,
+    width: '100%',
+    flexDirection: 'row-reverse',
+    justifyContent: 'flex-end'
   }
 })

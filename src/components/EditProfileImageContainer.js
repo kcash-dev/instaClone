@@ -1,36 +1,53 @@
-import { StyleSheet, Image, View, Text, Pressable } from 'react-native'
-import React from 'react'
+import { 
+    StyleSheet, 
+    View, 
+    SafeAreaView, 
+    Image, 
+    Pressable, 
+    Text,
+    Alert,
+    Platform 
+} from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { useNavigation } from '@react-navigation/native';
+
+//Firebase
+import { doc, getDoc, getFirestore } from 'firebase/firestore'
+import { auth } from '../auth/firebase';
 
 const EditProfileImageContainer = ({ item }) => {
-  return (
-    <View style={ styles.profileImageContainer }>
-        { item?.profileImage !== undefined ?
-            <Image 
-                source={{ uri: item.profileImage }}
-                style={ styles.profileImage }
-            />
-            :
-            <Image 
-                source={{ uri: 'https://i.imgur.com/O024Oaz.jpg' }}
-                style={ styles.profileImage }
-            />
-        }
-        <Pressable
-            style={({ pressed }) => [
-                {
-                    opacity: pressed ?
-                    0.5
-                    :
-                    1
-                }
-            ]}
-        >
-            <Text style={ styles.changePhotoText }>
-                Change profile photo
-            </Text>
-        </Pressable>
-    </View>
-  )
+    const navigation = useNavigation()
+
+    return (
+        <View style={ styles.profileImageContainer }>
+            { item?.profilePicURI !== undefined ?
+                <Image 
+                    source={{ uri: item.profilePicURI }}
+                    style={ styles.profileImage }
+                />
+                :
+                <Image 
+                    source={{ uri: 'https://i.imgur.com/O024Oaz.jpg' }}
+                    style={ styles.profileImage }
+                />
+            }
+            <Pressable
+                style={({ pressed }) => [
+                    {
+                        opacity: pressed ?
+                        0.5
+                        :
+                        1
+                    }
+                ]}
+                onPress={() => navigation.navigate('Upload Profile Pic')}
+            >
+                <Text style={ styles.changePhotoText }>
+                    Change profile photo
+                </Text>
+            </Pressable>
+        </View>
+    )
 }
 
 export default EditProfileImageContainer

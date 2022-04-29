@@ -1,4 +1,4 @@
-import { StyleSheet, Text, SafeAreaView } from 'react-native'
+import { StyleSheet, Text, SafeAreaView, Alert } from 'react-native'
 import React, { useState, useEffect } from 'react'
 
 import { useNavigation } from '@react-navigation/native';
@@ -22,6 +22,8 @@ const EditProfileScreen = ({ route }) => {
         bio: ''
     })
 
+    console.log(userInfo, "USERINFO")
+
     const auth = getAuth()
     const db = getFirestore()
 
@@ -35,28 +37,12 @@ const EditProfileScreen = ({ route }) => {
             bio: userState.bio
         })
     }
-
-    const saveDataToCloud = () => {
-        updateUserInfo()
-        navigation.navigate('HomeNav', {
-            screen: 'Profile'
-        })
-    }
-
-    const handleCallback = (childData) => {
-        setUserState({
-            name: childData.name,
-            username: childData.username,
-            website: childData.website,
-            bio: childData.bio,
-        })
-    }
     
     return (
         <SafeAreaView style={ styles.container }>
-            <EditProfileHeader callback={ saveDataToCloud }/>
+            <EditProfileHeader />
             <EditProfileImageContainer item={ userInfo } />
-            <EditProfileInfoContainer userState={ userState } handleCallback={ handleCallback }/>
+            <EditProfileInfoContainer userState={ userState } />
         </SafeAreaView>
     )
 }

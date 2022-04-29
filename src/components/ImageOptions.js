@@ -1,83 +1,109 @@
-import { StyleSheet, Text, View, Pressable } from 'react-native'
-import React from 'react'
+import { 
+    StyleSheet, 
+    Pressable, 
+    View
+} from 'react-native'
+import React, { useState } from 'react'
 
 //Icons
 import { FontAwesome } from '@expo/vector-icons';
 
-const ImageOptions = () => {
-  return (
-    <View style={ styles.imageOptions }>
-        <Pressable
-            style={({ pressed }) => [
-            {
-                opacity: pressed ?
-                0.5
+//Navigation
+import { useNavigation } from '@react-navigation/native';
+
+const ImageOptions = ({ item }) => {
+    const [ liked, setLiked ] = useState(false)
+    const navigation = useNavigation()
+
+    return (
+        <View style={ styles.imageOptions }>
+            <Pressable
+                style={({ pressed }) => [
+                {
+                    opacity: pressed ?
+                    0.5
+                    :
+                    1
+                }
+                ]}
+                onPressOut={() => setLiked(!liked)}
+            >
+                { liked ? 
+                <FontAwesome 
+                    name="heart" 
+                    size={24} 
+                    color="black" 
+                    style={{ paddingHorizontal: 10 }}
+                />
                 :
-                1
-            }
-            ]}
-        >
-            <FontAwesome 
-                name="heart-o" 
-                size={24} 
-                color="black" 
-                style={{ paddingHorizontal: 10 }}
-            />
-        </Pressable>
-        <Pressable
-            style={({ pressed }) => [
-            {
-                opacity: pressed ?
-                0.5
-                :
-                1
-            }
-            ]}
-        >
-            <FontAwesome 
-                name="comment-o" 
-                size={24} 
-                color="black" 
-                style={{ paddingHorizontal: 10 }}
-            />
-        </Pressable>
-        <Pressable
-            style={({ pressed }) => [
-            {
-                opacity: pressed ?
-                0.5
-                :
-                1
-            }
-            ]}
-        >
-            <FontAwesome 
-                name="send-o" 
-                size={24} 
-                color="black" 
-                style={{ paddingHorizontal: 10 }}
-            />
-        </Pressable>
-        <Pressable
-            style={({ pressed }) => [
-            {
-                opacity: pressed ?
-                0.5
-                :
-                1
-            },
-            styles.bookmarkButton
-            ]}
-        >
-            <FontAwesome 
-                name="bookmark-o" 
-                size={24} 
-                color="black" 
-                style={{ paddingHorizontal: 10 }}
-            />
-        </Pressable>
-    </View>
-  )
+                <FontAwesome 
+                    name="heart-o" 
+                    size={24} 
+                    color="black" 
+                    style={{ paddingHorizontal: 10 }}
+                />
+                }
+            </Pressable>
+            <Pressable
+                style={({ pressed }) => [
+                {
+                    opacity: pressed ?
+                    0.5
+                    :
+                    1
+                }
+                ]}
+                onPressOut={() => navigation.navigate('CommentsNav', {
+                    screen: 'Comments',
+                    params: {
+                        item: item
+                    }
+                })}
+            >
+                <FontAwesome 
+                    name="comment-o" 
+                    size={24} 
+                    color="black" 
+                    style={{ paddingHorizontal: 10 }}
+                />
+            </Pressable>
+            <Pressable
+                style={({ pressed }) => [
+                {
+                    opacity: pressed ?
+                    0.5
+                    :
+                    1
+                }
+                ]}
+            >
+                <FontAwesome 
+                    name="send-o" 
+                    size={24} 
+                    color="black" 
+                    style={{ paddingHorizontal: 10 }}
+                />
+            </Pressable>
+            <Pressable
+                style={({ pressed }) => [
+                {
+                    opacity: pressed ?
+                    0.5
+                    :
+                    1
+                },
+                styles.bookmarkButton
+                ]}
+            >
+                <FontAwesome 
+                    name="bookmark-o" 
+                    size={24} 
+                    color="black" 
+                    style={{ paddingHorizontal: 10 }}
+                />
+            </Pressable>
+        </View>
+    )
 }
 
 export default ImageOptions

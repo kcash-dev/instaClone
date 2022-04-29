@@ -7,6 +7,7 @@ import ImageOptions from './ImageOptions';
 import CaptionContainer from './CaptionContainer';
 
 const FeedImage = ({ item }) => {
+
   return (
     <View>
         <ProfileBar item={ item } />
@@ -14,7 +15,7 @@ const FeedImage = ({ item }) => {
             source={{ uri: item.imageURI }}
             style={{ width: '100%', height: 300 }}
         />
-        <ImageOptions />
+        <ImageOptions item={ item }/>
         <CaptionContainer item={ item } />
     </View>
   )

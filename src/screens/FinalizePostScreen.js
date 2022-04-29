@@ -9,7 +9,8 @@ import {
     TouchableWithoutFeedback,
     Keyboard,
     KeyboardAvoidingView,
-    Platform 
+    Platform,
+    ActivityIndicator 
 } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native';
@@ -41,6 +42,8 @@ const FinalizePostScreen = ({ route }) => {
     const [ caption, setCaption ] = useState('')
     const [ currentUserInfo, setCurrentUserInfo ] = useState()
     const [ url, setUrl ] = useState('')
+    const [ isLoading, setIsLoading ] = useState(false)
+
     const navigation = useNavigation()
     const currentUser = auth.currentUser.uid
     const firestore = getFirestore()
@@ -55,6 +58,7 @@ const FinalizePostScreen = ({ route }) => {
     }, [])
 
     const uploadImage = async (image) => {
+        setIsLoading(true)
         const storage = getStorage();
         const name = caption;
         const imageRef = ref(storage, name);
@@ -78,14 +82,15 @@ const FinalizePostScreen = ({ route }) => {
                     })
                 }).catch((err) => console.error(err))
             })
-
-        navigation.navigate('HomeNav', {
-            screen: 'Feed'
-        })
+            setIsLoading(false)
+            navigation.navigate('HomeNav', {
+                screen: 'Feed'
+            })
     }
 
     return (
         <SafeAreaView style={ styles.container }>
+            
             <View style={ styles.nextButtonContainer }>
                 <Pressable
                 style={({ pressed }) => [
@@ -112,11 +117,11 @@ const FinalizePostScreen = ({ route }) => {
                     ]}
                     onPress={() => uploadImage(image)}
                 >
-                <Text
-                    style={[ styles.nextButton, { color: '#76c8f8' } ]}
-                >
-                    Post
-                </Text>
+                    <Text
+                        style={[ styles.nextButton, { color: '#76c8f8' } ]}
+                    >
+                        Post
+                    </Text>
                 </Pressable>
             </View>
                 <TouchableWithoutFeedback
@@ -142,8 +147,18 @@ const FinalizePostScreen = ({ route }) => {
                             />
                         </TouchableWithoutFeedback>
                     </KeyboardAvoidingView>
-            </View>
+                </View>
             </TouchableWithoutFeedback>
+            { isLoading ?
+                <View style={ styles.loadingIndicator }>
+                    <Text style={{ textAlign: 'center', fontSize: 30, fontWeight: 'bold' }}>
+                        Posting...
+                    </Text>
+                    <ActivityIndicator size="large" color='#000' />
+                </View>
+                :
+                null
+            }
         </SafeAreaView>
     )
 }
@@ -188,5 +203,15 @@ const styles = StyleSheet.create({
         paddingTop: 25,
         color: '#fff',
         opacity: 0.6
+    },
+    loadingIndicator: {
+        position: 'absolute', 
+        top: 0, 
+        left: 0, 
+        right: 0, 
+        bottom: 0, 
+        justifyContent: 'center', 
+        alignItems: 'center',
+        backgroundColor: '#fff',
     }
 })

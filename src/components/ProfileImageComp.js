@@ -2,10 +2,8 @@ import { StyleSheet, Image, Pressable } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 
-const ProfileImageComp = ({ item }) => {
+const ProfileImageComp = ({ item, data }) => {
     const navigation = useNavigation()
-
-    console.log(item, 'ITEM')
     return (
         <Pressable
             style={({ pressed }) => [
@@ -14,17 +12,17 @@ const ProfileImageComp = ({ item }) => {
                     0.5
                     :
                     1,
-                    width: '33%',
-                    marginBottom: 1
+                    width: '34%',
+                    marginHorizontal: 1
                 }
             ]}
             onPress={() => navigation.navigate('ProfileNav', {
                 screen: 'View Post',
                 params: {
-                    image: item
+                    imageData: data
                 }
             },
-            ) }
+            )}
         >
             <Image 
                 source={{ uri: item }}

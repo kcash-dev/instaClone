@@ -4,8 +4,15 @@ import React from 'react'
 //Navigation
 import { useNavigation } from '@react-navigation/native'
 
-const EditProfileHeader = () => {
+//Icons
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+
+const EditProfileHeader = ({ callback }) => {
     const navigation = useNavigation()
+
+    const handleCallback = () => {
+        callback()
+    }
 
     return (
         <View style={ styles.headerContainer }>
@@ -24,11 +31,21 @@ const EditProfileHeader = () => {
                     Cancel
                 </Text>
             </Pressable>
-            <View style={ styles.headerTextContainer }>
-                <Text style={ styles.headerText }>
-                    Edit profile
-                </Text>
-            </View>
+            <Text style={ styles.headerText }>
+                Comments
+            </Text>
+            <Pressable
+                style={({ pressed }) => [
+                    {
+                        opacity: pressed ?
+                        0.5
+                        :
+                        1
+                    }
+                ]}
+            >
+                <MaterialCommunityIcons name="dots-horizontal" size={24} color="black" />
+            </Pressable>
         </View>
     )
 }
@@ -40,14 +57,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         borderBottomColor: '#EBECF0',
         borderBottomWidth: 1,
-        padding: '5%',
+        justifyContent: 'space-between',
+        padding: '5%'
     },
     cancelButtonText: {
         fontSize: 18
-    },
-    headerTextContainer: {
-        alignItems: 'center',
-        width: '65%'
     },
     headerText: {
         fontSize: 18,
