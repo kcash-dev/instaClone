@@ -26,7 +26,10 @@ import {
     updateDoc,
     getFirestore,
     arrayUnion,
-    getDoc
+    getDoc,
+    addDoc,
+    collection,
+    getDocs
 } from 'firebase/firestore'
 
 import {
@@ -43,6 +46,7 @@ const FinalizePostScreen = ({ route }) => {
     const [ currentUserInfo, setCurrentUserInfo ] = useState()
     const [ url, setUrl ] = useState('')
     const [ isLoading, setIsLoading ] = useState(false)
+    const [ postsCollection, setPostsCollection ] = useState()
 
     const navigation = useNavigation()
     const currentUser = auth.currentUser.uid
@@ -51,6 +55,14 @@ const FinalizePostScreen = ({ route }) => {
     useEffect(async () => {
         const userRef = doc(firestore, 'users', currentUser)
         const docSnap = await getDoc(userRef)
+
+        const docs = []
+        const querySnapshot = await getDocs(collection(firestore, 'posts'))
+        querySnapshot.forEach((doc) => {
+            docs.push(doc.data())
+        })
+
+        setPostsCollection(docs)
 
         if(docSnap.exists()) {
             setCurrentUserInfo(docSnap.data())
@@ -75,10 +87,17 @@ const FinalizePostScreen = ({ route }) => {
                         posts: arrayUnion({
                             id: currentUserInfo.posts.length,
                             profileName: currentUserInfo.username,
-                            profilePicURI: 'https://i.imgur.com/jEVwln7.jpg',
+                            profilePicURI: currentUserInfo.profilePicURI,
                             imageURI: x,
                             caption: name
                         })
+                    })
+                    await addDoc(collection(firestore, 'posts'), {
+                        id: postsCollection.length,
+                        profileName: currentUserInfo.username,
+                        profilePicURI: currentUserInfo.profilePicURI,
+                        imageURI: x,
+                        caption: name
                     })
                 }).catch((err) => console.error(err))
             })

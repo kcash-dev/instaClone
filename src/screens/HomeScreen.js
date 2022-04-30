@@ -1,7 +1,9 @@
 import { StyleSheet, FlatList, SafeAreaView } from 'react-native'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import { collection, getDocs, getFirestore } from 'firebase/firestore'
 
 //Components
 import FeedImage from '../components/FeedImage'
@@ -31,11 +33,26 @@ const DATA = [
 ]
 
 const HomeScreen = () => {
+  const [ data, setData ] = useState()
+  const firestore = getFirestore()
+  
+  useEffect( async () => {
+    const docs = []
+    const querySnapshot = await getDocs(collection(firestore, 'posts'))
+    querySnapshot.forEach((doc) => {
+      docs.push(doc.data())
+    })
+
+    setData(docs)
+  }, [])
+
+  console.log(data)
+
   const navigation = useNavigation()
   return (
     <SafeAreaView>
       <FlatList 
-        data={ DATA }
+        data={ data }
         renderItem={({ item }) => <FeedImage item={ item }/>}
       />
       
