@@ -12,7 +12,12 @@ import {
     Platform,
     ActivityIndicator 
 } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import 
+React, 
+{ 
+    useState, 
+    useEffect 
+} from 'react'
 import { useNavigation } from '@react-navigation/native';
 import {
     getDownloadURL,
@@ -93,7 +98,7 @@ const FinalizePostScreen = ({ route }) => {
                         })
                     })
                     await addDoc(collection(firestore, 'posts'), {
-                        id: postsCollection.length,
+                        id: postsCollection.length + 1,
                         profileName: currentUserInfo.username,
                         profilePicURI: currentUserInfo.profilePicURI,
                         imageURI: x,

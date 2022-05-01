@@ -22,8 +22,6 @@ const EditProfileScreen = ({ route }) => {
         bio: ''
     })
 
-    console.log(userInfo, "USERINFO")
-
     const auth = getAuth()
     const db = getFirestore()
 

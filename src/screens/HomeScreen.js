@@ -1,36 +1,24 @@
-import { StyleSheet, FlatList, SafeAreaView } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import { 
+  StyleSheet, 
+  FlatList, 
+  SafeAreaView, 
+  Text 
+} from 'react-native'
+import 
+React, 
+{ 
+  useState, 
+  useEffect 
+} from 'react'
 import { useNavigation } from '@react-navigation/native'
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-import { collection, getDocs, getFirestore } from 'firebase/firestore'
+import { 
+  collection, 
+  getDocs, 
+  getFirestore 
+} from 'firebase/firestore'
 
 //Components
 import FeedImage from '../components/FeedImage'
-
-const DATA = [
-  {
-    id: 1,
-    profileName: 'kcash935',
-    profilePicURI: 'https://i.imgur.com/jEVwln7.jpg',
-    imageURI: 'https://i.imgur.com/VdCOYOy.jpg',
-    caption: 'Kyle in a bottle'
-  },
-  {
-    id: 2,
-    profileName: 'kcash935',
-    profilePicURI: 'https://i.imgur.com/jEVwln7.jpg',
-    imageURI: 'https://i.imgur.com/FtI1Ldi.jpg',
-    caption: 'Majestic Mountains'
-  },
-  {
-    id: 3,
-    profileName: 'kcash935',
-    profilePicURI: 'https://i.imgur.com/jEVwln7.jpg',
-    imageURI: 'https://i.imgur.com/EO24Oaj.jpg',
-    caption: 'Sunsets'
-  }
-]
 
 const HomeScreen = () => {
   const [ data, setData ] = useState()
@@ -46,20 +34,29 @@ const HomeScreen = () => {
     setData(docs)
   }, [])
 
-  console.log(data)
-
   const navigation = useNavigation()
   return (
-    <SafeAreaView>
+    <SafeAreaView style={ styles.container }>
+     { data ?
       <FlatList 
         data={ data }
         renderItem={({ item }) => <FeedImage item={ item }/>}
+        inverted={ true }
       />
-      
+    :
+      <Text>
+        You haven't followed anyone yet.
+      </Text>
+    } 
     </SafeAreaView>
   )
 }
 
 export default HomeScreen
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#fff',
+    flex: 1
+  }
+})

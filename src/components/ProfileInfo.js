@@ -32,11 +32,14 @@ const ProfileInfo = () => {
         const docRef = doc(db, 'users', auth.currentUser.uid)
         const docSnap = await getDoc(docRef)
 
-        const user = docSnap.data()
-        
-        setUserInfo(user)
+        if (docSnap.exists()) {
+            const user = docSnap.data()
+            
+            setUserInfo(user)
+        }
         
         setUrl(userInfo.website)
+        
         if(userInfo.posts.length === 1) {
             setPostText('post')
         } else {
@@ -46,13 +49,13 @@ const ProfileInfo = () => {
 
     useEffect(() => {
         getUserInfo()
-    }, [ userInfo ])
+    }, [])
 
     return (
     <View>
         <View style={ styles.profileInfoContainer }>
             <Image 
-                source={{ uri: userInfo.profilePicURI }}
+                source={{ uri: userInfo?.profilePicURI }}
                 style={ styles.profilePicture }
             />
             <View>

@@ -4,7 +4,7 @@ import {
   FlatList, 
   Pressable, 
   Alert, 
-  Text 
+  Text,
 } from 'react-native'
 import React, { useState, useEffect, useCallback } from 'react'
 
@@ -22,27 +22,29 @@ import { MaterialIcons } from '@expo/vector-icons';
 const ProfileImages = () => {
   const [ scroll, setScroll ] = useState(false)
   const [ DATA, setDATA ] = useState()
+  const firestore = getFirestore()
 
   useEffect( async () => {
-    const currentUser = auth.currentUser.uid
-    const firestore = getFirestore()
-    const userRef = doc(firestore, 'users', currentUser);
-    const docSnap = await getDoc(userRef)
-    let userInfo;
-
-    if(docSnap.exists()) {
-      userInfo = docSnap.data()
-      setDATA(userInfo)
-    } else {
-      Alert.alert('No images found!')
-    }
-
+    loadPhotos()
+    
     if(DATA.posts.length >= 7) {
       setScroll(true)
     } else {
       setScroll(false)
     }
-  }, [ DATA ])
+  }, [])
+
+  const loadPhotos = async () => {
+    const currentUser = auth.currentUser.uid
+    const userRef = doc(firestore, 'users', currentUser);
+    const docSnap = await getDoc(userRef)
+
+    if(docSnap.exists()) {
+      setDATA(docSnap.data())
+    } else {
+      Alert.alert('No images found!')
+    }
+  }
 
   const renderItem = useCallback(
     ({ item }) => <ProfileImageComp item={ item.imageURI } data={item} />,
