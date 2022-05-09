@@ -32,7 +32,6 @@ const EditProfileInfoContainer = ({ userState }) => {
 
         await updateDoc(userRef, {
             fullName: state.name,
-            username: state.username,
             website: state.website,
             bio: state.bio
         })
@@ -56,7 +55,6 @@ const EditProfileInfoContainer = ({ userState }) => {
 
         setState({
             name: userInfo.fullName,
-            username: userInfo.username,
             website: userInfo?.website,
             bio: userInfo?.bio,
         })
@@ -84,24 +82,6 @@ const EditProfileInfoContainer = ({ userState }) => {
                                 name: text
                             })}
                             autoCapitalize='words'
-                            placeholderTextColor='#000'
-                        />
-                    </View>
-                </TouchableWithoutFeedback>
-            </View>
-            <View>
-                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                    <View style={ styles.inputContainer }>
-                        <Text style={ styles.text }>Username</Text>
-                        <TextInput 
-                            style={ styles.textInput }
-                            placeholder={ userState.username }
-                            value={ state.username }
-                            autoCapitalize='none'
-                            onChangeText={text => setState({
-                                ...state,
-                                username: text
-                            })}
                             placeholderTextColor='#000'
                         />
                     </View>

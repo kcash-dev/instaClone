@@ -15,6 +15,7 @@ import React, { useState } from 'react'
 import Button from '../components/Button'
 import { useNavigation } from '@react-navigation/native'
 import { registration, auth, onAuthStateChanged } from '../auth/firebase'
+import { getAuth, updateProfile } from 'firebase/auth'
 
 const SignUpScreen = () => {
     const [ email, setEmail ] = useState('')
@@ -32,12 +33,15 @@ const SignUpScreen = () => {
         } else if (!fullName) {
             Alert.alert('Full name field is required.');
         } else {
-          registration(
-            email,
-            password,
-            fullName,
-            username,
-          );
+            registration(
+                email,
+                password,
+                fullName,
+                username,
+            );
+            updateProfile(auth.currentUser), {
+                displayName: username
+            }
         }
       };
 

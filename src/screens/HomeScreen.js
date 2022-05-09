@@ -8,7 +8,8 @@ import
 React, 
 { 
   useState, 
-  useEffect 
+  useEffect,
+  useCallback 
 } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { 
@@ -34,14 +35,24 @@ const HomeScreen = () => {
     setData(docs)
   }, [])
 
+  const renderItem = useCallback(
+    ({ item }) => <FeedImage item={ item }/>,
+    []
+  );
+
+  const keyExtractor = useCallback((item) => item.id.toString(), []);
+
   const navigation = useNavigation()
   return (
     <SafeAreaView style={ styles.container }>
      { data ?
       <FlatList 
         data={ data }
-        renderItem={({ item }) => <FeedImage item={ item }/>}
-        inverted={ true }
+        renderItem={ renderItem }
+        keyExtractor={ keyExtractor }
+        contentContainerStyle={{ justifyContent: 'flex-end' }}
+        inverted
+        showsVerticalScrollIndicator={ false }
       />
     :
       <Text>

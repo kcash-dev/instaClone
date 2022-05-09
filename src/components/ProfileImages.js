@@ -2,15 +2,10 @@ import {
   StyleSheet, 
   View, 
   FlatList, 
-  Pressable, 
-  Alert, 
+  Pressable,
   Text,
 } from 'react-native'
 import React, { useState, useEffect, useCallback } from 'react'
-
-//Firebase
-import { doc, getDoc, getFirestore } from 'firebase/firestore'
-import { auth } from '../auth/firebase'
 
 //Components
 import ProfileImageComp from './ProfileImageComp'
@@ -19,32 +14,16 @@ import ProfileImageComp from './ProfileImageComp'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 
-const ProfileImages = () => {
+const ProfileImages = ({ userInfo }) => {
   const [ scroll, setScroll ] = useState(false)
-  const [ DATA, setDATA ] = useState()
-  const firestore = getFirestore()
 
-  useEffect( async () => {
-    loadPhotos()
-    
-    if(DATA.posts.length >= 7) {
+  useEffect(() => {
+    if(userInfo?.posts > 6) {
       setScroll(true)
-    } else {
+    } else if (userInfo?.posts <= 6) {
       setScroll(false)
     }
-  }, [])
-
-  const loadPhotos = async () => {
-    const currentUser = auth.currentUser.uid
-    const userRef = doc(firestore, 'users', currentUser);
-    const docSnap = await getDoc(userRef)
-
-    if(docSnap.exists()) {
-      setDATA(docSnap.data())
-    } else {
-      Alert.alert('No images found!')
-    }
-  }
+  }, [ userInfo ])
 
   const renderItem = useCallback(
     ({ item }) => <ProfileImageComp item={ item.imageURI } data={item} />,
@@ -117,23 +96,22 @@ const ProfileImages = () => {
           />
         </Pressable>
       </View>
-      { DATA?.posts === undefined ?
+      { userInfo ?
+       <FlatList
+         data={userInfo.posts}
+         renderItem={renderItem}
+         keyExtractor={keyExtractor}
+         numColumns={ 3 }
+         columnWrapperStyle={ styles.row }
+         scrollEnabled={ scroll }
+         showsVerticalScrollIndicator={ false }
+       />
+        :
         <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
           <Text style={{ fontSize: 18, color: '#808080' }}>
             You don't have any posts yet.
           </Text>
         </View>
-        :
-        <FlatList
-          data={DATA?.posts}
-          renderItem={renderItem}
-          keyExtractor={keyExtractor}
-          numColumns={ 3 }
-          columnWrapperStyle={ styles.row }
-          scrollEnabled={ scroll }
-          showsVerticalScrollIndicator={ false }
-        />
-
       }
     </View>
   )

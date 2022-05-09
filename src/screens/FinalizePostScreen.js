@@ -34,7 +34,8 @@ import {
     getDoc,
     addDoc,
     collection,
-    getDocs
+    getDocs,
+    setDoc
 } from 'firebase/firestore'
 
 import {
@@ -97,12 +98,13 @@ const FinalizePostScreen = ({ route }) => {
                             caption: name
                         })
                     })
-                    await addDoc(collection(firestore, 'posts'), {
+                    await setDoc(doc(firestore, 'posts', name), {
                         id: postsCollection.length + 1,
                         profileName: currentUserInfo.username,
                         profilePicURI: currentUserInfo.profilePicURI,
                         imageURI: x,
-                        caption: name
+                        caption: name,
+                        likes: []
                     })
                 }).catch((err) => console.error(err))
             })

@@ -3,7 +3,7 @@ import {
     Pressable, 
     View
 } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 //Icons
 import { FontAwesome } from '@expo/vector-icons';
@@ -11,9 +11,63 @@ import { FontAwesome } from '@expo/vector-icons';
 //Navigation
 import { useNavigation } from '@react-navigation/native';
 
+//Firebase
+import { 
+    doc, 
+    updateDoc, 
+    getFirestore, 
+    getDoc, 
+    arrayUnion, 
+    arrayRemove,
+    onSnapshot 
+} from "firebase/firestore";
+import { getAuth } from 'firebase/auth';
+
 const ImageOptions = ({ item }) => {
     const [ liked, setLiked ] = useState(false)
+    const [ likedUsers, setLikedUsers ] = useState()
     const navigation = useNavigation()
+
+    const firestore = getFirestore()
+    const auth = getAuth()
+    const photoRef = doc(firestore, 'posts', item.caption)
+
+    const getLikes = async () => {
+        const photoSnap = await getDoc(photoRef)
+
+        if (photoSnap.exists()) {
+            setLikedUsers(photoSnap.data().likes)
+            photoSnap.data().likes.forEach(user => {
+                if (user === auth.currentUser.uid) {
+                    setLiked(true)
+                } else {
+                    setLiked(false)
+                }
+            })
+        }
+    }
+
+    useEffect(() => {
+        getLikes()
+    }, [])
+
+    console.log(auth.currentUser)
+
+    const addOrRemoveLike = async () => {
+        likedUsers.forEach(async user => {
+            if (user === auth.currentUser.uid) {
+                await updateDoc(photoRef, {
+                    likes: arrayRemove(auth.currentUser.uid)
+                })
+                getLikes()
+            } else {
+                await updateDoc(photoRef, {
+                    likes: arrayUnion(auth.currentUser.uid)
+                })
+                getLikes()
+            }
+        })
+    }
 
     return (
         <View style={ styles.imageOptions }>
@@ -26,7 +80,7 @@ const ImageOptions = ({ item }) => {
                     1
                 }
                 ]}
-                onPressOut={() => setLiked(!liked)}
+                onPressOut={() => addOrRemoveLike()}
             >
                 { liked ? 
                 <FontAwesome 
@@ -101,6 +155,9 @@ const ImageOptions = ({ item }) => {
                     color="black" 
                     style={{ paddingHorizontal: 10 }}
                 />
+            </Pressable>
+            <Pressable>
+
             </Pressable>
         </View>
     )
