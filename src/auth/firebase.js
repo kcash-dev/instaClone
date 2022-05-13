@@ -42,6 +42,7 @@ const registration = async (email, password, fullName, username) => {
         username: username,
         bio: '',
         website: '',
+        posts: []
       })
     })
     .catch((error) => {

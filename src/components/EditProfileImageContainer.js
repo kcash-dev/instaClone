@@ -8,29 +8,18 @@ import {
     Alert,
     Platform 
 } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { useNavigation } from '@react-navigation/native';
-
-//Firebase
-import { doc, getDoc, getFirestore } from 'firebase/firestore'
-import { auth } from '../auth/firebase';
 
 const EditProfileImageContainer = ({ item }) => {
     const navigation = useNavigation()
 
     return (
         <View style={ styles.profileImageContainer }>
-            { item?.profilePicURI !== undefined ?
-                <Image 
-                    source={{ uri: item.profilePicURI }}
-                    style={ styles.profileImage }
-                />
-                :
-                <Image 
-                    source={{ uri: 'https://i.imgur.com/O024Oaz.jpg' }}
-                    style={ styles.profileImage }
-                />
-            }
+            <Image 
+                source={{ uri: item.profilePhoto }}
+                style={ styles.profileImage }
+            />
             <Pressable
                 style={({ pressed }) => [
                     {

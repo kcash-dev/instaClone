@@ -10,36 +10,52 @@ import Button from '../components/Button'
 import ProfileImages from '../components/ProfileImages'
 
 //Firebase
-import { getDoc, doc, getFirestore } from 'firebase/firestore'
+import { getDoc, doc, getFirestore, onSnapshot } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
 
 const ProfileScreen = () => {
-  const [ userInfo, setUserInfo ] = useState()
   const navigation = useNavigation()
+  const [ userInfo, setUserInfo ] = useState({
+    profilePhoto: 'https://i.imgur.com/O024Oaz.jpg',
+    fullName: '',
+    numUserPosts: 0,
+    email: '',
+    bio: '',
+    website: '',
+    posts:[]
+  })
+  const firestore = getFirestore()
   const auth = getAuth()
-  const db = getFirestore()
 
-  const getUserInfo = async () => {
-    const docRef = doc(db, 'users', auth.currentUser.uid)
-    const docSnap = await getDoc(docRef)
-
-    if (docSnap.exists()) {
-        const user = docSnap.data()
-        
-        setUserInfo(user)
+    const sub = () => {
+      onSnapshot(doc(firestore, "users", auth.currentUser.uid), (doc) => {
+        setUserInfo({
+          ...userInfo,
+          profilePhoto: doc.data().profilePicURI,
+          numUserPosts: doc.data().posts.length,
+          fullName: doc.data().fullName,
+          email: doc.data().email,
+          bio: doc.data().bio,
+          website: doc.data().website,
+          posts: doc.data().posts
+        })
+      })
     }
-  }
 
-  useEffect(() => {
-    getUserInfo()
-  }, [])
+    useEffect(() => {
+      sub()
+    }, [])
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
       <ProfileHeader />
-      <ProfileInfo userInfo={ userInfo }/>
-      <ProfileImages userInfo={ userInfo }/>
-      {/* <Button 
+      <ProfileInfo 
+        userInfo={ userInfo }
+      />
+      <ProfileImages 
+        userInfo={ userInfo }
+      />
+      <Button 
         placeholderText={'Sign Out'}
         onPress={() => {
           loggingOut()
@@ -47,7 +63,7 @@ const ProfileScreen = () => {
             screen: 'Login Screen'
           })
         }}
-      /> */}
+      />
     </SafeAreaView>
   )
 }

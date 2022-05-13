@@ -14,33 +14,12 @@ import EditProfileInfoContainer from '../components/EditProfileInfoContainer';
 
 const EditProfileScreen = ({ route }) => {
     const { userInfo } = route.params;
-    const navigation = useNavigation()
-    const [ userState, setUserState ] = useState({
-        name: '',
-        username: '',
-        website: '',
-        bio: ''
-    })
-
-    const auth = getAuth()
-    const db = getFirestore()
-
-    const updateUserInfo = async () => {
-        const userRef = doc(db, 'users', auth.currentUser.uid)
-
-        await updateDoc(userRef, {
-            fullName: userState.name,
-            username: userState.username,
-            website: userState.website,
-            bio: userState.bio
-        })
-    }
     
     return (
         <SafeAreaView style={ styles.container }>
             <EditProfileHeader />
             <EditProfileImageContainer item={ userInfo } />
-            <EditProfileInfoContainer userState={ userState } />
+            <EditProfileInfoContainer userInfo={ userInfo } />
         </SafeAreaView>
     )
 }

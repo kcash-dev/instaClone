@@ -5,7 +5,7 @@ import {
     Image,
     Pressable 
 } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 
 import * as Linking from 'expo-linking';
 
@@ -23,14 +23,14 @@ const ProfileInfo = ({ userInfo }) => {
         <View>
             <View style={ styles.profileInfoContainer }>
                 <Image 
-                    source={{ uri: userInfo?.profilePicURI }}
+                    source={{ uri: userInfo.profilePhoto }}
                     style={ styles.profilePicture }
                 />
                 <View>
                     <View style={ styles.innerProfileInfoContainer }>
                         <View style={ styles.profileSpecifics }>
                             <Text style={ styles.profileNumbers }>
-                                { userInfo?.posts?.length }
+                                { userInfo.numUserPosts }
                             </Text>
                             <Text style={ styles.profileSpecificsText }>
                                 posts
@@ -63,7 +63,6 @@ const ProfileInfo = ({ userInfo }) => {
                                         userInfo: userInfo
                                     }
                                 }) }
-                            
                             />
                         </View>
                         <View style={ styles.arrowOptionsContainer }>
@@ -75,7 +74,7 @@ const ProfileInfo = ({ userInfo }) => {
             <View style={ styles.bioContainer }>
                 <View>
                     <Text style={ styles.username }>
-                        { userInfo?.fullName }
+                        { userInfo.fullName }
                     </Text>
                 </View>
                 <Pressable
@@ -90,12 +89,12 @@ const ProfileInfo = ({ userInfo }) => {
                     onPressOut={() => Linking.openURL('https://' + url)}
                 >
                     <Text style={{ color: 'blue' }}>
-                        { userInfo?.website }
+                        { userInfo.website }
                     </Text>
                 </Pressable>
                 <View>
                     <Text>
-                        { userInfo?.bio }
+                        { userInfo.bio }
                     </Text>
                 </View>
             </View>

@@ -18,14 +18,15 @@ import { useNavigation } from '@react-navigation/native';
 import { getDoc, doc, updateDoc, getFirestore } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
 
-const EditProfileInfoContainer = ({ userState }) => {
+const EditProfileInfoContainer = ({ userInfo }) => {
     const navigation = useNavigation()
     const [ state, setState ] = useState({
-        name: userState.name,
-        username: userState.username,
-        website: userState.website,
-        bio: userState.bio
+        name: userInfo.fullName,
+        website: userInfo.website,
+        bio: userInfo.bio
     })
+
+    console.log(state)
 
     const updateUserInfo = async () => {
         const userRef = doc(db, 'users', auth.currentUser.uid)
@@ -35,34 +36,19 @@ const EditProfileInfoContainer = ({ userState }) => {
             website: state.website,
             bio: state.bio
         })
+        .then(() => {
+            navigation.navigate('HomeNav', {
+                screen: 'Profile'
+            })
+        })
     }
 
     const saveDataToCloud = () => {
         updateUserInfo()
-        navigation.navigate('HomeNav', {
-            screen: 'Profile'
-        })
     }
 
     const auth = getAuth()
     const db = getFirestore()
-
-    const getUserInfo = async () => {
-        const docRef = doc(db, 'users', auth.currentUser.uid)
-        const docSnap = await getDoc(docRef)
-
-        const userInfo = docSnap.data()
-
-        setState({
-            name: userInfo.fullName,
-            website: userInfo?.website,
-            bio: userInfo?.bio,
-        })
-    }
-
-    useEffect(() => {
-        getUserInfo()
-    }, [])
 
     return (
         <KeyboardAvoidingView
@@ -75,11 +61,11 @@ const EditProfileInfoContainer = ({ userState }) => {
                         <Text style={ styles.text }>Name</Text>
                         <TextInput 
                             style={ styles.textInput }
-                            placeholder={ userState.name }
+                            placeholder={ state.name }
                             value={ state.name }
                             onChangeText={text => setState({
                                 ...state,
-                                name: text
+                                fullName: text
                             })}
                             autoCapitalize='words'
                             placeholderTextColor='#000'
@@ -93,7 +79,7 @@ const EditProfileInfoContainer = ({ userState }) => {
                         <Text style={ styles.text }>Website</Text>
                         <TextInput 
                             style={ styles.textInput }
-                            placeholder={ userState.website ? userState.website : 'Enter a website' }
+                            placeholder={ state.website ? state.website : 'Enter a website' }
                             value={ state.website }
                             keyboardType='url'
                             autoCapitalize='none'
@@ -112,7 +98,7 @@ const EditProfileInfoContainer = ({ userState }) => {
                         <Text style={ styles.text }>Bio</Text>
                         <TextInput 
                             style={ styles.textInput }
-                            placeholder={ userState.bio ? userState.bio : 'Enter a bio' }
+                            placeholder={ state.bio ? state.bio : 'Enter a bio' }
                             value={ state.bio }
                             onChangeText={text => setState({
                                 ...state,
@@ -126,7 +112,7 @@ const EditProfileInfoContainer = ({ userState }) => {
             </View>
             <Button
                 title="Save"
-                onPress={() => saveDataToCloud()}
+                onPress={() => updateUserInfo()}
                 style={ styles.button }
             />
         </KeyboardAvoidingView>

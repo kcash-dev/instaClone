@@ -2,8 +2,10 @@ import {
   StyleSheet, 
   FlatList, 
   SafeAreaView, 
-  Text 
+  Text,
+  View 
 } from 'react-native'
+
 import 
 React, 
 { 
@@ -11,7 +13,11 @@ React,
   useEffect,
   useCallback 
 } from 'react'
-import { useNavigation } from '@react-navigation/native'
+
+import { 
+  useNavigation 
+} from '@react-navigation/native'
+
 import { 
   collection, 
   getDocs, 
@@ -22,7 +28,7 @@ import {
 import FeedImage from '../components/FeedImage'
 
 const HomeScreen = () => {
-  const [ data, setData ] = useState()
+  const [ data, setData ] = useState([])
   const firestore = getFirestore()
   
   useEffect( async () => {
@@ -40,24 +46,28 @@ const HomeScreen = () => {
     []
   );
 
-  const keyExtractor = useCallback((item) => item.id.toString(), []);
+  console.log(data)
+
+  const keyExtractor = useCallback(item => item?.id.toString(), []);
 
   const navigation = useNavigation()
   return (
     <SafeAreaView style={ styles.container }>
-     { data ?
+     { data.length > 0 ?
       <FlatList 
         data={ data }
         renderItem={ renderItem }
         keyExtractor={ keyExtractor }
-        contentContainerStyle={{ justifyContent: 'flex-end' }}
         inverted
         showsVerticalScrollIndicator={ false }
+        contentContainerStyle={{ flexGrow: 1, justifyContent: 'flex-end' }}
       />
     :
-      <Text>
-        You haven't followed anyone yet.
-      </Text>
+      <View style={ styles.alternateContainer }>
+        <Text>
+          There are no posts yet.
+        </Text>
+      </View>
     } 
     </SafeAreaView>
   )
@@ -69,5 +79,11 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
     flex: 1
+  },
+  alternateContainer: {
+    backgroundColor: '#fff',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 })

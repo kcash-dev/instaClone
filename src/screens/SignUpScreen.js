@@ -39,9 +39,10 @@ const SignUpScreen = () => {
                 fullName,
                 username,
             );
-            updateProfile(auth.currentUser), {
+
+            updateProfile(auth.currentUser, {
                 displayName: username
-            }
+            })
         }
       };
 
