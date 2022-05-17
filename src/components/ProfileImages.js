@@ -25,8 +25,6 @@ const ProfileImages = ({ userInfo }) => {
     }
   }, [ userInfo ])
 
-  console.log(userInfo, "PROFILE")
-
   const renderItem = useCallback(
     ({ item }) => <ProfileImageComp item={ item.imageURI } data={item} />,
     []

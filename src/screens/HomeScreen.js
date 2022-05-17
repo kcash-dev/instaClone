@@ -26,27 +26,53 @@ import {
 
 //Components
 import FeedImage from '../components/FeedImage'
+import { setStatusBarNetworkActivityIndicatorVisible } from 'expo-status-bar'
 
 const HomeScreen = () => {
   const [ data, setData ] = useState([])
   const firestore = getFirestore()
+
+  const getUserPosts = async () => {
+    const posts = []
+    const postSnapshot = await getDocs(collection(firestore,"users"));
+
+    postSnapshot.forEach(doc => {
+      const data = doc.data()
+      const username = data.username
+      const profilePic = data.profilePicURI
+      data.posts.forEach(post => {
+        const data = {
+          username: username,
+          profilePic: profilePic,
+          caption: post.caption,
+          id: post.id,
+          imageURI: post.imageURI,
+          dateAndTime: post.dateAndTime,
+          likes: []
+        }
+
+        posts.push(data)
+      })
+    })
+    setData(posts)
+  }
   
   useEffect( async () => {
-    const docs = []
-    const querySnapshot = await getDocs(collection(firestore, 'posts'))
-    querySnapshot.forEach((doc) => {
-      docs.push(doc.data())
-    })
+    // const docs = []
+    // const querySnapshot = await getDocs(collection(firestore, 'posts'))
+    // querySnapshot.forEach((doc) => {
+    //   docs.push(doc.data())
+    // })
 
-    setData(docs)
+    // setData(docs)
+
+    getUserPosts()
   }, [])
 
   const renderItem = useCallback(
     ({ item }) => <FeedImage item={ item }/>,
     []
   );
-
-  console.log(data)
 
   const keyExtractor = useCallback(item => item?.id.toString(), []);
 

@@ -11,13 +11,13 @@ import {
 import React from 'react'
 import { useNavigation } from '@react-navigation/native';
 
-const EditProfileImageContainer = ({ item }) => {
+const EditProfileImageContainer = ({ userInfo }) => {
     const navigation = useNavigation()
 
     return (
         <View style={ styles.profileImageContainer }>
             <Image 
-                source={{ uri: item.profilePhoto }}
+                source={{ uri: userInfo.profilePhoto }}
                 style={ styles.profileImage }
             />
             <Pressable

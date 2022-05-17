@@ -2,19 +2,30 @@ import { StyleSheet, Text, View, Pressable, Image } from 'react-native'
 import React from 'react'
 
 //Icons
-import { FontAwesome } from '@expo/vector-icons';
 import { SimpleLineIcons } from '@expo/vector-icons';
 
 const ProfileBar = ({ item }) => {
   return (
     <View style={ styles.profileBar }>
-        <Image 
-            source={{ uri: item.profilePicURI }}
-            style={ styles.profilePicture }
-        />
-        <Text style={ styles.profileNameText }>
-            { item.profileName }
-        </Text>
+        <Pressable
+            style={({ pressed }) => [
+                {
+                    opacity: pressed ?
+                        0.5
+                        :
+                        1
+                },
+                styles.pressableAccount
+            ]}
+        >
+            <Image 
+                source={{ uri: item.profilePic }}
+                style={ styles.profilePicture }
+            />
+            <Text style={ styles.profileNameText }>
+                { item.username }
+            </Text>
+        </Pressable>
         <Pressable
             style={({ pressed }) => [
             {
@@ -60,4 +71,8 @@ const styles = StyleSheet.create({
         position: 'absolute',
         right: 10
     },
+    pressableAccount: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    }
 })

@@ -26,8 +26,6 @@ const EditProfileInfoContainer = ({ userInfo }) => {
         bio: userInfo.bio
     })
 
-    console.log(state)
-
     const updateUserInfo = async () => {
         const userRef = doc(db, 'users', auth.currentUser.uid)
 

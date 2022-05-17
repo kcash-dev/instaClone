@@ -58,17 +58,15 @@ const FinalizePostScreen = ({ route }) => {
     const currentUser = auth.currentUser.uid
     const firestore = getFirestore()
 
+
+    // * Need to fix this useEffect
     useEffect(async () => {
         const userRef = doc(firestore, 'users', currentUser)
         const docSnap = await getDoc(userRef)
 
         const docs = []
-        const querySnapshot = await getDocs(collection(firestore, 'posts'))
-        querySnapshot.forEach((doc) => {
-            docs.push(doc.data())
-        })
-
-        setPostsCollection(docs)
+        const querySnapshot = await getDocs(collection(firestore, 'users', auth.currentUser.uid))
+        
 
         if(docSnap.exists()) {
             setCurrentUserInfo(docSnap.data())
@@ -83,6 +81,11 @@ const FinalizePostScreen = ({ route }) => {
 
         const img = await fetch(image.uri)
         const bytes = await img.blob();
+
+        let today = new Date()
+        let date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate()
+        let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        let dateTime = date+' '+time;
         
         await uploadBytes(imageRef, bytes)
             .then( async () => {
@@ -95,17 +98,19 @@ const FinalizePostScreen = ({ route }) => {
                             profileName: currentUserInfo.username,
                             profilePicURI: currentUserInfo.profilePicURI,
                             imageURI: x,
-                            caption: name
+                            caption: name,
+                            dateAndTime: dateTime,
+                            likes: []
                         })
                     })
-                    await setDoc(doc(firestore, 'posts', name), {
-                        id: postsCollection.length + 1,
-                        profileName: currentUserInfo.username,
-                        profilePicURI: currentUserInfo.profilePicURI,
-                        imageURI: x,
-                        caption: name,
-                        likes: []
-                    })
+                    // await setDoc(doc(firestore, 'posts', name), {
+                    //     id: postsCollection.length + 1,
+                    //     profileName: currentUserInfo.username,
+                    //     profilePicURI: currentUserInfo.profilePicURI,
+                    //     imageURI: x,
+                    //     caption: name,
+                    //     likes: []
+                    // })
                 }).catch((err) => console.error(err))
             })
             setIsLoading(false)

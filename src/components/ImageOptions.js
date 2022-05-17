@@ -32,26 +32,23 @@ const ImageOptions = ({ item }) => {
     const auth = getAuth()
     const photoRef = doc(firestore, 'posts', item.caption)
 
-    const getLikes = async () => {
-        const photoSnap = await getDoc(photoRef)
+    // const getLikes = async () => {
+    //     onSnapshot(doc(firestore, users, auth.currentUser.uid), (doc) => {
+    //         setLikedUsers(doc.data().likes)
 
-        if (photoSnap.exists()) {
-            setLikedUsers(photoSnap.data().likes)
-            photoSnap.data().likes.forEach(user => {
-                if (user === auth.currentUser.uid) {
-                    setLiked(true)
-                } else {
-                    setLiked(false)
-                }
-            })
-        }
-    }
+    //         doc.data().likes.forEach(like => {
+    //             if(like === auth.currentUser.uid) {
+    //                 setLiked(true)
+    //             } else {
+    //                 setLiked(false)
+    //             }
+    //         })
+    //     })
+    // }
 
-    useEffect(() => {
-        getLikes()
-    }, [])
-
-    console.log(auth.currentUser)
+    // useEffect(() => {
+    //     getLikes()
+    // }, [])
 
     const addOrRemoveLike = async () => {
         likedUsers.forEach(async user => {
@@ -59,12 +56,10 @@ const ImageOptions = ({ item }) => {
                 await updateDoc(photoRef, {
                     likes: arrayRemove(auth.currentUser.uid)
                 })
-                getLikes()
             } else {
                 await updateDoc(photoRef, {
                     likes: arrayUnion(auth.currentUser.uid)
                 })
-                getLikes()
             }
         })
     }
@@ -80,22 +75,22 @@ const ImageOptions = ({ item }) => {
                     1
                 }
                 ]}
-                onPressOut={() => addOrRemoveLike()}
+                onPress={() => addOrRemoveLike()}
             >
                 { liked ? 
-                <FontAwesome 
-                    name="heart" 
-                    size={24} 
-                    color="black" 
-                    style={{ paddingHorizontal: 10 }}
-                />
-                :
-                <FontAwesome 
-                    name="heart-o" 
-                    size={24} 
-                    color="black" 
-                    style={{ paddingHorizontal: 10 }}
-                />
+                    <FontAwesome 
+                        name="heart" 
+                        size={24} 
+                        color="black" 
+                        style={{ paddingHorizontal: 10 }}
+                    />
+                    :
+                    <FontAwesome 
+                        name="heart-o" 
+                        size={24} 
+                        color="black" 
+                        style={{ paddingHorizontal: 10 }}
+                    />
                 }
             </Pressable>
             <Pressable

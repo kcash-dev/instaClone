@@ -7,7 +7,6 @@ import ImageOptions from './ImageOptions';
 import CaptionContainer from './CaptionContainer';
 
 const FeedImage = ({ item }) => {
-
   return (
     <View>
         <ProfileBar item={ item } />

@@ -18,7 +18,7 @@ const EditProfileScreen = ({ route }) => {
     return (
         <SafeAreaView style={ styles.container }>
             <EditProfileHeader />
-            <EditProfileImageContainer item={ userInfo } />
+            <EditProfileImageContainer userInfo={ userInfo } />
             <EditProfileInfoContainer userInfo={ userInfo } />
         </SafeAreaView>
     )
