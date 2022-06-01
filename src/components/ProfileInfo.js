@@ -18,12 +18,14 @@ import ProfileButton from './ProfileButton'
 
 const ProfileInfo = ({ userInfo }) => {
     const navigation = useNavigation()
+    console.log(userInfo)
+    const userPhoto = userInfo.profilePhoto != undefined ? userInfo.profilePhoto : userInfo.profilePicURI
 
     return (
         <View>
             <View style={ styles.profileInfoContainer }>
                 <Image 
-                    source={{ uri: userInfo.profilePhoto }}
+                    source={{ uri: userPhoto }}
                     style={ styles.profilePicture }
                 />
                 <View>

@@ -65,7 +65,7 @@ const FinalizePostScreen = ({ route }) => {
         const docSnap = await getDoc(userRef)
 
         const docs = []
-        const querySnapshot = await getDocs(collection(firestore, 'users', auth.currentUser.uid))
+        const querySnapshot = await getDocs(collection(firestore, 'users'))
         
 
         if(docSnap.exists()) {
