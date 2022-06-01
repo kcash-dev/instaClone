@@ -3,7 +3,7 @@ import React from 'react'
 
 //Components
 import ProfileHeader from '../components/ProfileHeader'
-import ProfileInfo from '../components/ProfileInfo'
+import ViewProfileInfo from '../components/ViewProfileInfo'
 import Button from '../components/Button'
 import ProfileImages from '../components/ProfileImages'
 
@@ -12,7 +12,7 @@ const ViewProfileScreen = ({ route }) => {
     return (
         <SafeAreaView style={ styles.container }>
         <ProfileHeader />
-        <ProfileInfo 
+        <ViewProfileInfo 
             userInfo={ userInfo }
         />
         <ProfileImages 

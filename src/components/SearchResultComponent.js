@@ -35,7 +35,7 @@ const SearchResultComponent = ({ userInfo }) => {
             />
             <View style={ styles.textContainer }>
                 <Text style={ styles.usernameText }>{ userInfo.username }</Text>
-                <Text>{ userInfo.fullName }</Text>
+                <Text style={ styles.nameText }>{ userInfo.fullName }</Text>
             </View>
         </View>
       </Pressable>
@@ -49,7 +49,12 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
-        marginVertical: '3%'
+        marginVertical: '3%',
+        borderBottomWidth: 1,
+        borderBottomColor: '#ECECEC',
+        borderTopWidth: 1,
+        borderTopColor: '#ECECEC',
+        paddingVertical: '3%'
     },
     profilePic: {
         width: 40, 
@@ -62,5 +67,8 @@ const styles = StyleSheet.create({
     },
     usernameText: {
         fontWeight: 'bold'
+    },
+    nameText: {
+        color: '#808080'
     }
 })
